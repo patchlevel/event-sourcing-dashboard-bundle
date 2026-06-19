@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Patchlevel\EventSourcingAdminBundle\Tests\Unit;
+namespace Patchlevel\EventSourcingDashboardBundle\Tests\Unit;
 
 use Patchlevel\EventSourcing\Metadata\Message\MessageHeaderRegistry;
-use Patchlevel\EventSourcingAdminBundle\Controller\DefaultController;
-use Patchlevel\EventSourcingAdminBundle\Controller\EventController;
-use Patchlevel\EventSourcingAdminBundle\Controller\InspectionController;
-use Patchlevel\EventSourcingAdminBundle\Controller\StoreController;
-use Patchlevel\EventSourcingAdminBundle\Controller\SubscriptionController;
-use Patchlevel\EventSourcingAdminBundle\DependencyInjection\PatchlevelEventSourcingAdminExtension;
-use Patchlevel\EventSourcingAdminBundle\Message\Header\RequestIdHeader;
-use Patchlevel\EventSourcingAdminBundle\PatchlevelEventSourcingAdminBundle;
+use Patchlevel\EventSourcingDashboardBundle\Controller\DefaultController;
+use Patchlevel\EventSourcingDashboardBundle\Controller\EventController;
+use Patchlevel\EventSourcingDashboardBundle\Controller\InspectionController;
+use Patchlevel\EventSourcingDashboardBundle\Controller\StoreController;
+use Patchlevel\EventSourcingDashboardBundle\Controller\SubscriptionController;
+use Patchlevel\EventSourcingDashboardBundle\DependencyInjection\PatchlevelEventSourcingDashboardExtension;
+use Patchlevel\EventSourcingDashboardBundle\Message\Header\RequestIdHeader;
+use Patchlevel\EventSourcingDashboardBundle\PatchlevelEventSourcingDashboardBundle;
 use Patchlevel\EventSourcingBundle\DependencyInjection\PatchlevelEventSourcingExtension;
 use Patchlevel\EventSourcingBundle\PatchlevelEventSourcingBundle;
 use PHPUnit\Framework\TestCase;
@@ -23,11 +23,11 @@ class PatchlevelEventSourcingBundleTest extends TestCase
     public function testEmptyConfig(): void
     {
         $container = new ContainerBuilder();
-        $bundle = new PatchlevelEventSourcingAdminBundle();
+        $bundle = new PatchlevelEventSourcingDashboardBundle();
 
         $bundle->build($container);
 
-        $extension = new PatchlevelEventSourcingAdminExtension();
+        $extension = new PatchlevelEventSourcingDashboardExtension();
         $extension->load([], $container);
 
         $container->compile();
@@ -45,7 +45,7 @@ class PatchlevelEventSourcingBundleTest extends TestCase
         $this->compileContainer(
             $container,
             [
-                'patchlevel_event_sourcing_admin' => [
+                'patchlevel_event_sourcing_dashboard' => [
                     'enabled' => true,
                 ],
             ]
@@ -70,7 +70,7 @@ class PatchlevelEventSourcingBundleTest extends TestCase
         $bundle = new PatchlevelEventSourcingBundle();
         $bundle->build($container);
 
-        $bundle = new PatchlevelEventSourcingAdminBundle();
+        $bundle = new PatchlevelEventSourcingDashboardBundle();
         $bundle->build($container);
 
         $container->setParameter('kernel.project_dir', __DIR__);
@@ -89,7 +89,7 @@ class PatchlevelEventSourcingBundleTest extends TestCase
             $container
         );
 
-        $extension = new PatchlevelEventSourcingAdminExtension();
+        $extension = new PatchlevelEventSourcingDashboardExtension();
         $extension->load($config, $container);
 
         $compilerPassConfig = $container->getCompilerPassConfig();

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Patchlevel\EventSourcingAdminBundle\Message\Header;
+namespace Patchlevel\EventSourcingDashboardBundle\Message\Header;
 
 use Patchlevel\EventSourcing\Attribute\Header;
 

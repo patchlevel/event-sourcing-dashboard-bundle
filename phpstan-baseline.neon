@@ -7,7 +7,7 @@ parameters:
 			path: src/DependencyInjection/CustomMessageHeaderCompilerPass.php
 
 		-
-			message: '#^Method Patchlevel\\EventSourcingAdminBundle\\Twig\\DumpExtension\:\:dump\(\) should return string but returns string\|null\.$#'
+			message: '#^Method Patchlevel\\EventSourcingDashboardBundle\\Twig\\DumpExtension\:\:dump\(\) should return string but returns string\|null\.$#'
 			identifier: return.type
 			count: 1
 			path: src/Twig/DumpExtension.php

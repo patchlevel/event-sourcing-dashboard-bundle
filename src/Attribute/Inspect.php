@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Patchlevel\EventSourcingAdminBundle\Attribute;
+namespace Patchlevel\EventSourcingDashboardBundle\Attribute;
 
 use Attribute;
-use Patchlevel\EventSourcingAdminBundle\Color;
+use Patchlevel\EventSourcingDashboardBundle\Color;
 
 #[Attribute(Attribute::TARGET_CLASS)]
 final class Inspect

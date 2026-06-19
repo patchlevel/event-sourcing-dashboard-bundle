@@ -1,5 +1,5 @@
 {
-  "name": "patchlevel/event-sourcing-admin-bundle",
+  "name": "patchlevel/event-sourcing-dashboard-bundle",
   "type": "symfony-bundle",
   "license": "MIT",
   "description": "Dashboard to inspect events, time travel through aggregates and manage subscriptions for patchlevel/event-sourcing.",
@@ -8,10 +8,9 @@
     "event-sourcing",
     "bundle",
     "symfony",
-    "admin",
     "dashboard"
   ],
-  "homepage": "https://patchlevel.dev/docs/event-sourcing-admin-bundle/latest",
+  "homepage": "https://patchlevel.dev/docs/event-sourcing-dashboard-bundle/latest",
   "authors": [
     {
       "name": "Daniel Badura",
@@ -58,12 +57,12 @@
   },
   "autoload": {
     "psr-4": {
-      "Patchlevel\\EventSourcingAdminBundle\\": "src/"
+      "Patchlevel\\EventSourcingDashboardBundle\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Patchlevel\\EventSourcingAdminBundle\\Tests\\": "tests/"
+      "Patchlevel\\EventSourcingDashboardBundle\\Tests\\": "tests/"
     }
   },
   "prefer-stable": true

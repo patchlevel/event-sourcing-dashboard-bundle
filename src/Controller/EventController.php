@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Patchlevel\EventSourcingAdminBundle\Controller;
+namespace Patchlevel\EventSourcingDashboardBundle\Controller;
 
 use Patchlevel\EventSourcing\Attribute\Subscribe;
 use Patchlevel\EventSourcing\EventBus\ListenerDescriptor;
@@ -43,7 +43,7 @@ final class EventController
             ];
         }
 
-        return new Response($this->twig->render('@PatchlevelEventSourcingAdmin/event/index.html.twig', ['events' => $events]));
+        return new Response($this->twig->render('@PatchlevelEventSourcingDashboard/event/index.html.twig', ['events' => $events]));
     }
 
     /**

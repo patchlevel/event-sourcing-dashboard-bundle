@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Patchlevel\EventSourcingAdminBundle\Twig;
+namespace Patchlevel\EventSourcingDashboardBundle\Twig;
 
 use DateTimeImmutable;
 use Patchlevel\EventSourcing\Aggregate\AggregateHeader;
@@ -18,8 +18,8 @@ use Patchlevel\EventSourcing\Store\Header\RecordedOnHeader;
 use Patchlevel\EventSourcing\Store\Header\StreamNameHeader;
 use Patchlevel\EventSourcing\Store\Store;
 use Patchlevel\EventSourcing\Store\StreamStore;
-use Patchlevel\EventSourcingAdminBundle\Message\Header\RequestIdHeader;
-use Patchlevel\EventSourcingAdminBundle\TokenMapper;
+use Patchlevel\EventSourcingDashboardBundle\Message\Header\RequestIdHeader;
+use Patchlevel\EventSourcingDashboardBundle\TokenMapper;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -27,7 +27,7 @@ use function array_pop;
 use function explode;
 use function get_class;
 
-final class EventSourcingAdminExtension extends AbstractExtension
+final class EventSourcingDashboardExtension extends AbstractExtension
 {
     public function __construct(
         private readonly AggregateRootRegistry $aggregateRootRegistry,

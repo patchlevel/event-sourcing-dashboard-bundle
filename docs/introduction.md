@@ -1,6 +1,6 @@
 # Introduction
 
-The Event-Sourcing Admin Bundle provides a web dashboard for applications built on
+The Event-Sourcing Dashboard Bundle provides a web dashboard for applications built on
 [patchlevel/event-sourcing](https://github.com/patchlevel/event-sourcing) and the
 [event-sourcing-bundle](https://github.com/patchlevel/event-sourcing-bundle). It lets you browse the
 event store, inspect aggregates over time, see how events connect to your subscribers, and manage
@@ -21,7 +21,7 @@ production once it is placed behind proper authentication.
 ## Installation
 
 ```bash
-composer require --dev patchlevel/event-sourcing-admin-bundle
+composer require --dev patchlevel/event-sourcing-dashboard-bundle
 ```
 :::tip
 Follow the [getting started](getting-started.md) guide to enable the bundle, register its routes

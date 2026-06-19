@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Patchlevel\EventSourcingAdminBundle\Controller;
+namespace Patchlevel\EventSourcingDashboardBundle\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +18,7 @@ final class DefaultController
     public function indexAction(): Response
     {
         return new RedirectResponse(
-            $this->router->generate('patchlevel_event_sourcing_admin_store_show'),
+            $this->router->generate('patchlevel_event_sourcing_dashboard_store_show'),
         );
     }
 }

@@ -1,4 +1,4 @@
-{% extends '@PatchlevelEventSourcingAdmin/layout.html.twig' %}
+{% extends '@PatchlevelEventSourcingDashboard/layout.html.twig' %}
 
 {% block content %}
     <div class="px-4 sm:px-6 lg:px-8">
@@ -10,7 +10,7 @@
                         <div class="flex min-w-0 gap-x-4">
                             <div class="min-w-0 flex-auto">
                                 <p class="text-sm/6 font-semibold text-gray-900">
-                                    <a data-add-hash href="{{ path('patchlevel_event_sourcing_admin_inspection_show', {aggregateName: option.name, aggregateId: option.id}) }}">
+                                    <a data-add-hash href="{{ path('patchlevel_event_sourcing_dashboard_inspection_show', {aggregateName: option.name, aggregateId: option.id}) }}">
                                         <span class="absolute inset-x-0 -top-px bottom-0"></span>
                                         {{ option.name }}
                                     </a>

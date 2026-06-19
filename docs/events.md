@@ -44,8 +44,8 @@ where every argument is optional:
 
 ```php
 use Patchlevel\EventSourcing\Attribute\Event;
-use Patchlevel\EventSourcingAdminBundle\Attribute\Inspect;
-use Patchlevel\EventSourcingAdminBundle\Color;
+use Patchlevel\EventSourcingDashboardBundle\Attribute\Inspect;
+use Patchlevel\EventSourcingDashboardBundle\Color;
 
 #[Event('guest_is_checked_in')]
 #[Inspect(
@@ -78,7 +78,7 @@ event available as `event`. This lets you build a description from the event's o
 
 ```php
 use Patchlevel\EventSourcing\Attribute\Event;
-use Patchlevel\EventSourcingAdminBundle\Attribute\Inspect;
+use Patchlevel\EventSourcingDashboardBundle\Attribute\Inspect;
 
 #[Event('guest_is_checked_in')]
 #[Inspect(description: 'Guest **{{ event.name }}** checked into room {{ event.room }}')]
@@ -106,8 +106,8 @@ raw hex string when you need an exact value:
 
 ```php
 use Patchlevel\EventSourcing\Attribute\Event;
-use Patchlevel\EventSourcingAdminBundle\Attribute\Inspect;
-use Patchlevel\EventSourcingAdminBundle\Color;
+use Patchlevel\EventSourcingDashboardBundle\Attribute\Inspect;
+use Patchlevel\EventSourcingDashboardBundle\Color;
 
 #[Event('guest_is_checked_in')]
 #[Inspect(icon: 'arrow-right-on-rectangle', color: Color::Rose)]

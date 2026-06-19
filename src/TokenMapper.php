@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Patchlevel\EventSourcingAdminBundle;
+namespace Patchlevel\EventSourcingDashboardBundle;
 
 use RuntimeException;
 

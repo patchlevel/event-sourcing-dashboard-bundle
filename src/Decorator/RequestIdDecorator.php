@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Patchlevel\EventSourcingAdminBundle\Decorator;
+namespace Patchlevel\EventSourcingDashboardBundle\Decorator;
 
 use Patchlevel\EventSourcing\Message\Message;
 use Patchlevel\EventSourcing\Repository\MessageDecorator\MessageDecorator;
-use Patchlevel\EventSourcingAdminBundle\Listener\RequestIdListener;
-use Patchlevel\EventSourcingAdminBundle\Message\Header\RequestIdHeader;
+use Patchlevel\EventSourcingDashboardBundle\Listener\RequestIdListener;
+use Patchlevel\EventSourcingDashboardBundle\Message\Header\RequestIdHeader;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 use function is_string;

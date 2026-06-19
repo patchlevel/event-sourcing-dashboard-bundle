@@ -1,26 +1,26 @@
-{% extends '@PatchlevelEventSourcingAdmin/base.html.twig' %}
+{% extends '@PatchlevelEventSourcingDashboard/base.html.twig' %}
 
 {% block body %}
     <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
         <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-indigo-600 px-6">
             <div class="flex h-20 shrink-0 items-center text-indigo-200 leading-6 font-semibold">
-                EventSourcing Admin
+                EventSourcing Dashboard
             </div>
             <nav class="flex flex-1 flex-col">
                 <ul role="list" class="flex flex-1 flex-col gap-y-7">
                     <li>
                         <ul role="list" class="-mx-2 space-y-1">
-                            {{ _self.nav_point("Store", "circle-stack", "patchlevel_event_sourcing_admin_store_show") }}
-                            {{ _self.nav_point("Inspection", "identification", "patchlevel_event_sourcing_admin_inspection_index") }}
-                            {{ _self.nav_point("Subscriptions", "video-camera", "patchlevel_event_sourcing_admin_subscription_show") }}
-                            {{ _self.nav_point("Events", "calendar", "patchlevel_event_sourcing_admin_event_index") }}
+                            {{ _self.nav_point("Store", "circle-stack", "patchlevel_event_sourcing_dashboard_store_show") }}
+                            {{ _self.nav_point("Inspection", "identification", "patchlevel_event_sourcing_dashboard_inspection_index") }}
+                            {{ _self.nav_point("Subscriptions", "video-camera", "patchlevel_event_sourcing_dashboard_subscription_show") }}
+                            {{ _self.nav_point("Events", "calendar", "patchlevel_event_sourcing_dashboard_event_index") }}
                         </ul>
                     </li>
                     <li class="-mx-6 mt-auto">
                         <a href="https://patchlevel.de" target="_blank"
                            class="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-indigo-700">
                             <img class="h-8 w-8 rounded-full bg-indigo-700"
-                                 src="{{ asset('bundles/patchleveleventsourcingadmin/logo.png') }}" alt="">
+                                 src="{{ asset('bundles/patchleveleventsourcingdashboard/logo.png') }}" alt="">
                             <span class="sr-only">Your profile</span>
                             <span aria-hidden="true">made by patchlevel</span>
                         </a>

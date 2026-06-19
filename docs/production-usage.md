@@ -15,7 +15,7 @@ Never expose it to the public without a security layer in front of it.
 For production the bundle must be a normal dependency rather than a dev only one:
 
 ```bash
-composer require patchlevel/event-sourcing-admin-bundle
+composer require patchlevel/event-sourcing-dashboard-bundle
 ```
 Make sure the bundle is registered for the environments you want it in, for example by removing the
 `['dev' => true]` restriction in `config/bundles.php`.
@@ -25,17 +25,17 @@ Make sure the bundle is registered for the environments you want it in, for exam
 Move the configuration out of the `when@dev` block so it applies in production too:
 
 ```yaml
-# config/packages/patchlevel_event_sourcing_admin.yaml
-patchlevel_event_sourcing_admin:
+# config/packages/patchlevel_event_sourcing_dashboard.yaml
+patchlevel_event_sourcing_dashboard:
     enabled: true
 ```
 Do the same for the routes import:
 
 ```yaml
-# config/routes/patchlevel_event_sourcing_admin.yaml
+# config/routes/patchlevel_event_sourcing_dashboard.yaml
 event_sourcing:
-    resource: '@PatchlevelEventSourcingAdminBundle/config/routes.yaml'
-    prefix: /es-admin
+    resource: '@PatchlevelEventSourcingDashboardBundle/config/routes.yaml'
+    prefix: /es-dashboard
 ```
 ## Secure the routes
 
@@ -46,7 +46,7 @@ with an access control rule that requires an admin role:
 # config/packages/security.yaml
 security:
     access_control:
-        - { path: ^/es-admin, roles: ROLE_ADMIN }
+        - { path: ^/es-dashboard, roles: ROLE_ADMIN }
 ```
 :::warning
 The subscription controls run synchronously in the web request. In production prefer the console

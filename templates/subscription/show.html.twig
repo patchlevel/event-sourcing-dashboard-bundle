@@ -1,4 +1,4 @@
-{% extends '@PatchlevelEventSourcingAdmin/layout.html.twig' %}
+{% extends '@PatchlevelEventSourcingDashboard/layout.html.twig' %}
 
 {% block content %}
     <div class="px-4 sm:px-6 lg:px-8">
@@ -9,7 +9,7 @@
         </div>
 
         <div class="">
-            <form class="flex gap-2 items-end" action="{{ path('patchlevel_event_sourcing_admin_subscription_show') }}">
+            <form class="flex gap-2 items-end" action="{{ path('patchlevel_event_sourcing_dashboard_subscription_show') }}">
                 <div class="w-48">
                     <label for="search" class="block text-xs font-medium leading-6 text-gray-900">Search</label>
                     <div class="mt-1">
@@ -71,7 +71,7 @@
 
                 {% if app.request.query.get('search') or app.request.query.get('group') or app.request.query.get('mode') or app.request.query.get('status') %}
                     <a class="rounded-md bg-red-600 px-2.5 py-1.5 font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
-                       href="{{ path('patchlevel_event_sourcing_admin_subscription_show') }}">
+                       href="{{ path('patchlevel_event_sourcing_dashboard_subscription_show') }}">
                         {{ heroicon('backspace', 'h-6 w-6') }}
                     </a>
                 {% endif %}
@@ -160,37 +160,37 @@
                                                 </button>
                                             </form>
 
-                                            {{ include('@PatchlevelEventSourcingAdmin/subscription/detail.html.twig', {
+                                            {{ include('@PatchlevelEventSourcingDashboard/subscription/detail.html.twig', {
                                                 subscription: subscription,
                                             }) }}
                                         </dialog>
                                         {% if subscription.status.value in ['active', 'booting', 'error'] %}
-                                        <a title="pause" href="{{ path('patchlevel_eventsourcingadmin_subscription_pause', {...app.request.query.all, id: subscription.id}) }}" class="text-gray-500 hover:text-gray-900">
+                                        <a title="pause" href="{{ path('patchlevel_eventsourcingdashboard_subscription_pause', {...app.request.query.all, id: subscription.id}) }}" class="text-gray-500 hover:text-gray-900">
                                             {{ heroicon('pause-circle', 'h-5 w-5') }}
                                         </a>
                                         {% endif %}
                                         {% if subscription.status.value in ['new'] %}
-                                            <a title="setup" href="{{ path('patchlevel_eventsourcingadmin_subscription_setup', {...app.request.query.all, id: subscription.id}) }}" class="text-gray-500 hover:text-gray-900">
+                                            <a title="setup" href="{{ path('patchlevel_eventsourcingdashboard_subscription_setup', {...app.request.query.all, id: subscription.id}) }}" class="text-gray-500 hover:text-gray-900">
                                                 {{ heroicon('power', 'h-5 w-5') }}
                                             </a>
                                         {% endif %}
                                         {% if subscription.status.value in ['paused', 'error', 'finished', 'detached', 'failed'] %}
-                                            <a title="activate" href="{{ path('patchlevel_eventsourcingadmin_subscription_reactivate', {...app.request.query.all, id: subscription.id}) }}" class="text-gray-500 hover:text-gray-900">
+                                            <a title="activate" href="{{ path('patchlevel_eventsourcingdashboard_subscription_reactivate', {...app.request.query.all, id: subscription.id}) }}" class="text-gray-500 hover:text-gray-900">
                                                 {{ heroicon('play-circle', 'h-5 w-5') }}
                                             </a>
                                         {% endif %}
                                         {% if subscription.status.value in ['paused', 'error', 'detached', 'failed'] %}
-                                            <a title="remove" href="{{ path('patchlevel_eventsourcingadmin_subscription_remove', {...app.request.query.all, id: subscription.id}) }}" class="text-gray-500 hover:text-gray-900">
+                                            <a title="remove" href="{{ path('patchlevel_eventsourcingdashboard_subscription_remove', {...app.request.query.all, id: subscription.id}) }}" class="text-gray-500 hover:text-gray-900">
                                                 {{ heroicon('trash', 'h-5 w-5') }}
                                             </a>
                                         {% endif %}
                                         {% if subscription.status.value in ['booting'] %}
-                                            <a title="boot" href="{{ path('patchlevel_eventsourcingadmin_subscription_boot', {...app.request.query.all, id: subscription.id}) }}" class="text-gray-500 hover:text-gray-900">
+                                            <a title="boot" href="{{ path('patchlevel_eventsourcingdashboard_subscription_boot', {...app.request.query.all, id: subscription.id}) }}" class="text-gray-500 hover:text-gray-900">
                                                 {{ heroicon('rocket-launch', 'h-5 w-5') }}
                                             </a>
                                         {% endif %}
                                         {% if subscription.status.value in ['active'] and subscription.position < messageCount %}
-                                            <a title="run" href="{{ path('patchlevel_eventsourcingadmin_subscription_run', {...app.request.query.all, id: subscription.id}) }}" class="text-gray-500 hover:text-gray-900">
+                                            <a title="run" href="{{ path('patchlevel_eventsourcingdashboard_subscription_run', {...app.request.query.all, id: subscription.id}) }}" class="text-gray-500 hover:text-gray-900">
                                                 {{ heroicon('bolt', 'h-5 w-5') }}
                                             </a>
                                         {% endif %}

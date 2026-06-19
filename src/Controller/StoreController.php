@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Patchlevel\EventSourcingAdminBundle\Controller;
+namespace Patchlevel\EventSourcingDashboardBundle\Controller;
 
 use Patchlevel\EventSourcing\Metadata\AggregateRoot\AggregateRootRegistry;
 use Patchlevel\EventSourcing\Metadata\Event\EventRegistry;
@@ -40,7 +40,7 @@ final class StoreController
         $count = $this->store->count($criteria);
 
         return new Response(
-            $this->twig->render('@PatchlevelEventSourcingAdmin/store/show.html.twig', [
+            $this->twig->render('@PatchlevelEventSourcingDashboard/store/show.html.twig', [
                 'messages' => $messages,
                 'count' => $count,
                 'aggregates' => $this->aggregateRootRegistry->aggregateNames(),

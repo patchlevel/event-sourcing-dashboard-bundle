@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Patchlevel\EventSourcingAdminBundle\Twig;
+namespace Patchlevel\EventSourcingDashboardBundle\Twig;
 
 use RuntimeException;
 use Twig\Extension\AbstractExtension;

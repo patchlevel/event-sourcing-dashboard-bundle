@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Patchlevel\EventSourcingAdminBundle\DependencyInjection;
+namespace Patchlevel\EventSourcingDashboardBundle\DependencyInjection;
 
 use Patchlevel\EventSourcing\EventBus\ListenerProvider;
 use Patchlevel\EventSourcing\Metadata\AggregateRoot\AggregateRootMetadataFactory;
@@ -13,19 +13,19 @@ use Patchlevel\EventSourcing\Serializer\EventSerializer;
 use Patchlevel\EventSourcing\Snapshot\SnapshotStore;
 use Patchlevel\EventSourcing\Store\Store;
 use Patchlevel\EventSourcing\Subscription\Engine\SubscriptionEngine;
-use Patchlevel\EventSourcingAdminBundle\Controller\DefaultController;
-use Patchlevel\EventSourcingAdminBundle\Controller\EventController;
-use Patchlevel\EventSourcingAdminBundle\Controller\InspectionController;
-use Patchlevel\EventSourcingAdminBundle\Controller\StoreController;
-use Patchlevel\EventSourcingAdminBundle\Controller\SubscriptionController;
-use Patchlevel\EventSourcingAdminBundle\Decorator\RequestIdDecorator;
-use Patchlevel\EventSourcingAdminBundle\Listener\RequestIdListener;
-use Patchlevel\EventSourcingAdminBundle\Listener\TokenMapperListener;
-use Patchlevel\EventSourcingAdminBundle\TokenMapper;
-use Patchlevel\EventSourcingAdminBundle\Twig\DumpExtension;
-use Patchlevel\EventSourcingAdminBundle\Twig\EventSourcingAdminExtension;
-use Patchlevel\EventSourcingAdminBundle\Twig\HeroiconsExtension;
-use Patchlevel\EventSourcingAdminBundle\Twig\InspectionExtension;
+use Patchlevel\EventSourcingDashboardBundle\Controller\DefaultController;
+use Patchlevel\EventSourcingDashboardBundle\Controller\EventController;
+use Patchlevel\EventSourcingDashboardBundle\Controller\InspectionController;
+use Patchlevel\EventSourcingDashboardBundle\Controller\StoreController;
+use Patchlevel\EventSourcingDashboardBundle\Controller\SubscriptionController;
+use Patchlevel\EventSourcingDashboardBundle\Decorator\RequestIdDecorator;
+use Patchlevel\EventSourcingDashboardBundle\Listener\RequestIdListener;
+use Patchlevel\EventSourcingDashboardBundle\Listener\TokenMapperListener;
+use Patchlevel\EventSourcingDashboardBundle\TokenMapper;
+use Patchlevel\EventSourcingDashboardBundle\Twig\DumpExtension;
+use Patchlevel\EventSourcingDashboardBundle\Twig\EventSourcingDashboardExtension;
+use Patchlevel\EventSourcingDashboardBundle\Twig\HeroiconsExtension;
+use Patchlevel\EventSourcingDashboardBundle\Twig\InspectionExtension;
 use Patchlevel\Hydrator\Hydrator;
 use Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -41,7 +41,7 @@ use Symfony\Component\Routing\RouterInterface;
  *     enabled: bool
  * }
  */
-final class PatchlevelEventSourcingAdminExtension extends Extension
+final class PatchlevelEventSourcingDashboardExtension extends Extension
 {
     /** @param array<array-key, mixed> $configs */
     public function load(array $configs, ContainerBuilder $container): void
@@ -101,7 +101,7 @@ final class PatchlevelEventSourcingAdminExtension extends Extension
             ])
             ->addTag('controller.service_arguments');
 
-        $container->register(EventSourcingAdminExtension::class)
+        $container->register(EventSourcingDashboardExtension::class)
             ->setArguments([
                 new Reference(AggregateRootRegistry::class),
                 new Reference(EventRegistry::class),
@@ -114,11 +114,11 @@ final class PatchlevelEventSourcingAdminExtension extends Extension
         $container->register(HeroiconsExtension::class)
             ->addTag('twig.extension');
 
-        $container->register('event_sourcing_admin.expression_language', ExpressionLanguage::class);
+        $container->register('event_sourcing_dashboard.expression_language', ExpressionLanguage::class);
 
         $container->register(InspectionExtension::class)
             ->setArguments([
-                new Reference('event_sourcing_admin.expression_language'),
+                new Reference('event_sourcing_dashboard.expression_language'),
             ])
             ->addTag('twig.extension');
 

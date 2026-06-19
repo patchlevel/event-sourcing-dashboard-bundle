@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Patchlevel\EventSourcingAdminBundle\DependencyInjection;
+namespace Patchlevel\EventSourcingDashboardBundle\DependencyInjection;
 
 use Patchlevel\EventSourcing\Metadata\Message\MessageHeaderRegistry;
-use Patchlevel\EventSourcingAdminBundle\Controller\DefaultController;
+use Patchlevel\EventSourcingDashboardBundle\Controller\DefaultController;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 

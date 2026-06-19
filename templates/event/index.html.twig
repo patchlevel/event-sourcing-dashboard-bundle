@@ -1,4 +1,4 @@
-{% extends '@PatchlevelEventSourcingAdmin/layout.html.twig' %}
+{% extends '@PatchlevelEventSourcingDashboard/layout.html.twig' %}
 
 {% block content %}
     <div class="px-4 sm:px-6 lg:px-8">
@@ -28,7 +28,7 @@
                         <li class="relative">
                             <span id="{{ event.name }}" class="absolute -top-48"></span>
                             <a class="flex justify-between gap-x-6 p-4"
-                               href="{{ path('patchlevel_event_sourcing_admin_event_index', {name: event.name}) }}#{{ event.name }}">
+                               href="{{ path('patchlevel_event_sourcing_dashboard_event_index', {name: event.name}) }}#{{ event.name }}">
                                 <div class="flex min-w-0 gap-x-4">
                                     <div {% if eventsourcing_inspection_color(event.class) %}style="background: {{ eventsourcing_inspection_color(event.class) }};"{% endif %}
                                          class="circle h-8 w-8 rounded-full bg-gray-400 flex items-center justify-center">

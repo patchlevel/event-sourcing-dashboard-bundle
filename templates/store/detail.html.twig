@@ -4,7 +4,7 @@
             <dt class="text-sm font-medium leading-6 text-gray-900">Stream</dt>
             <dd class="mt-1 text-sm leading-6 text-gray-500 sm:col-span-2 sm:mt-0">
                 {{ eventsourcing_stream_name(message) }}
-                <a class="group-hover/parent:visible invisible" href="{{ path('patchlevel_event_sourcing_admin_inspection_stream', {stream: eventsourcing_stream_name(message)}) }}#{{ eventsourcing_playhead(message) }}">
+                <a class="group-hover/parent:visible invisible" href="{{ path('patchlevel_event_sourcing_dashboard_inspection_stream', {stream: eventsourcing_stream_name(message)}) }}#{{ eventsourcing_playhead(message) }}">
                     {{ heroicon('identification', 'h-5 w-5 -mt-1 text-gray-400 inline') }}
                 </a>
             </dd>
@@ -17,7 +17,7 @@
             <dt class="text-sm font-medium leading-6 text-gray-900">Aggregate Id</dt>
             <dd class="mt-1 text-sm leading-6 text-gray-500 sm:col-span-2 sm:mt-0">
                 {{ eventsourcing_aggregate_id(message) }}
-                <a class="group-hover/parent:visible invisible" href="{{ path('patchlevel_event_sourcing_admin_inspection_show', {aggregateName: eventsourcing_aggregate_name(message), aggregateId: eventsourcing_aggregate_id(message)}) }}#{{ eventsourcing_playhead(message) }}">
+                <a class="group-hover/parent:visible invisible" href="{{ path('patchlevel_event_sourcing_dashboard_inspection_show', {aggregateName: eventsourcing_aggregate_name(message), aggregateId: eventsourcing_aggregate_id(message)}) }}#{{ eventsourcing_playhead(message) }}">
                     {{ heroicon('identification', 'h-5 w-5 -mt-1 text-gray-400 inline') }}
                 </a>
             </dd>
@@ -30,7 +30,7 @@
         <dt class="text-sm font-medium leading-6 text-gray-900">Event Name</dt>
         <dd class="mt-1 text-sm leading-6 text-gray-500 sm:col-span-2 sm:mt-0">
             {{ eventsourcing_event_name(message) }}
-            <a class="group-hover/parent:visible invisible" href="{{ path('patchlevel_event_sourcing_admin_event_index', {name: eventsourcing_event_name(message)}) }}#{{ eventsourcing_event_name(message) }}">
+            <a class="group-hover/parent:visible invisible" href="{{ path('patchlevel_event_sourcing_dashboard_event_index', {name: eventsourcing_event_name(message)}) }}#{{ eventsourcing_event_name(message) }}">
                 {{ heroicon('calendar', 'h-5 w-5 -mt-1 text-gray-400 inline') }}
             </a>
         </dd>
@@ -40,7 +40,7 @@
         <dt class="text-sm font-medium leading-6 text-gray-900">Event Class</dt>
         <dd class="mt-1 text-sm leading-6 text-gray-500 sm:col-span-2 sm:mt-0">
             {{ eventsourcing_event_class(message) }}
-            <a class="group-hover/parent:visible invisible" href="{{ path('patchlevel_event_sourcing_admin_event_index', {name: eventsourcing_event_name(message)}) }}#{{ eventsourcing_event_name(message) }}">
+            <a class="group-hover/parent:visible invisible" href="{{ path('patchlevel_event_sourcing_dashboard_event_index', {name: eventsourcing_event_name(message)}) }}#{{ eventsourcing_event_name(message) }}">
                 {{ heroicon('calendar', 'h-5 w-5 -mt-1 text-gray-400 inline') }}
             </a>
         </dd>

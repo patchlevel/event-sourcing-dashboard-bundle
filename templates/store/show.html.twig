@@ -1,4 +1,4 @@
-{% extends '@PatchlevelEventSourcingAdmin/layout.html.twig' %}
+{% extends '@PatchlevelEventSourcingDashboard/layout.html.twig' %}
 
 {% block content %}
     <div class="px-4 sm:px-6 lg:px-8">
@@ -9,7 +9,7 @@
         </div>
 
         <div class="">
-            <form class="flex gap-2 items-end" action="{{ path('patchlevel_event_sourcing_admin_store_show') }}">
+            <form class="flex gap-2 items-end" action="{{ path('patchlevel_event_sourcing_dashboard_store_show') }}">
                 {% if eventsourcing_uses_stream_store() %}
                     <div class="w-96">
                         <label for="streamName" class="block text-xs font-medium leading-6 text-gray-900">
@@ -75,7 +75,7 @@
 
                 {% if app.request.query.get('streamName') or app.request.query.get('aggregate') or app.request.query.get('aggregateId') %}
                     <a class="rounded-md bg-red-600 px-2.5 py-1.5 font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
-                       href="{{ path('patchlevel_event_sourcing_admin_store_show') }}">
+                       href="{{ path('patchlevel_event_sourcing_dashboard_store_show') }}">
                         {{ heroicon('backspace', 'h-6 w-6') }}
                     </a>
                 {% endif %}
@@ -123,7 +123,7 @@
                                     {% if eventsourcing_uses_stream_store() %}
                                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 group/parent">
                                             {{ eventsourcing_stream_name(message) }}
-                                            <a href="{{ path('patchlevel_event_sourcing_admin_store_show', { streamName: eventsourcing_stream_name(message) }) }}"
+                                            <a href="{{ path('patchlevel_event_sourcing_dashboard_store_show', { streamName: eventsourcing_stream_name(message) }) }}"
                                                class="text-gray-500 hover:text-gray-900 invisible group-hover/parent:visible">
                                                 {{ heroicon('funnel', 'h-5 w-5 inline') }}
                                             </a>
@@ -131,7 +131,7 @@
                                                class="text-gray-500 hover:text-gray-900 invisible group-hover/parent:visible">
                                                 {{ heroicon('clipboard', 'h-5 w-5 inline') }}
                                             </a>
-                                            <a href="{{ path('patchlevel_event_sourcing_admin_inspection_stream', { stream: eventsourcing_stream_name(message) }) }}#{{ eventsourcing_playhead(message) }}"
+                                            <a href="{{ path('patchlevel_event_sourcing_dashboard_inspection_stream', { stream: eventsourcing_stream_name(message) }) }}#{{ eventsourcing_playhead(message) }}"
                                                class="text-gray-500 hover:text-gray-900 invisible group-hover/parent:visible">
                                                 {{ heroicon('identification', 'h-5 w-5 inline') }}
                                             </a>
@@ -139,7 +139,7 @@
                                     {% else %}
                                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 group/parent">
                                             {{ eventsourcing_aggregate_name(message) }}
-                                            <a href="{{ path('patchlevel_event_sourcing_admin_store_show', { aggregate: eventsourcing_aggregate_name(message) }) }}"
+                                            <a href="{{ path('patchlevel_event_sourcing_dashboard_store_show', { aggregate: eventsourcing_aggregate_name(message) }) }}"
                                                class="text-gray-500 hover:text-gray-900 invisible group-hover/parent:visible">
                                                 {{ heroicon('funnel', 'h-5 w-5 inline') }}
                                             </a>
@@ -147,11 +147,11 @@
                                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 group/parent"
                                             title="{{ eventsourcing_aggregate_id(message) }}">
                                             {{ eventsourcing_short_id(eventsourcing_aggregate_id(message)) }}
-                                            <a href="{{ path('patchlevel_event_sourcing_admin_store_show', { aggregate: eventsourcing_aggregate_name(message), aggregateId: eventsourcing_aggregate_id(message) }) }}"
+                                            <a href="{{ path('patchlevel_event_sourcing_dashboard_store_show', { aggregate: eventsourcing_aggregate_name(message), aggregateId: eventsourcing_aggregate_id(message) }) }}"
                                                class="text-gray-500 hover:text-gray-900 invisible group-hover/parent:visible">
                                                 {{ heroicon('funnel', 'h-5 w-5 inline') }}
                                             </a>
-                                            <a href="{{ path('patchlevel_event_sourcing_admin_inspection_show', { aggregateName: eventsourcing_aggregate_name(message), aggregateId: eventsourcing_aggregate_id(message) }) }}#{{ eventsourcing_playhead(message) }}"
+                                            <a href="{{ path('patchlevel_event_sourcing_dashboard_inspection_show', { aggregateName: eventsourcing_aggregate_name(message), aggregateId: eventsourcing_aggregate_id(message) }) }}#{{ eventsourcing_playhead(message) }}"
                                                class="text-gray-500 hover:text-gray-900 invisible group-hover/parent:visible">
                                                 {{ heroicon('identification', 'h-5 w-5 inline') }}
                                             </a>
@@ -165,7 +165,7 @@
                                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right">{{ eventsourcing_playhead(message) }}</td>
                                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 group/parent">
                                         {{ eventsourcing_event_name(message) }}
-                                        <a href="{{ path('patchlevel_event_sourcing_admin_event_index', { name: eventsourcing_event_name(message)}) }}#{{ eventsourcing_event_name(message) }}"
+                                        <a href="{{ path('patchlevel_event_sourcing_dashboard_event_index', { name: eventsourcing_event_name(message)}) }}#{{ eventsourcing_event_name(message) }}"
                                            class="text-gray-500 hover:text-gray-900 invisible group-hover/parent:visible">
                                             {{ heroicon('calendar', 'h-5 w-5 inline') }}
                                         </a>
@@ -184,7 +184,7 @@
                                                 </button>
                                             </form>
 
-                                            {{ include('@PatchlevelEventSourcingAdmin/store/detail.html.twig', {
+                                            {{ include('@PatchlevelEventSourcingDashboard/store/detail.html.twig', {
                                                 message: message,
                                             }) }}
 
@@ -199,7 +199,7 @@
                             </tbody>
                         </table>
 
-                        {% include '@PatchlevelEventSourcingAdmin/pagination.html.twig' with {
+                        {% include '@PatchlevelEventSourcingDashboard/pagination.html.twig' with {
                             page: page,
                             count: count,
                             limit: limit,

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Patchlevel\EventSourcingAdminBundle\Twig;
+namespace Patchlevel\EventSourcingDashboardBundle\Twig;
 
-use Patchlevel\EventSourcingAdminBundle\Attribute\Inspect;
-use Patchlevel\EventSourcingAdminBundle\Color;
+use Patchlevel\EventSourcingDashboardBundle\Attribute\Inspect;
+use Patchlevel\EventSourcingDashboardBundle\Color;
 use ReflectionClass;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Twig\Extension\AbstractExtension;

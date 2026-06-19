@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Patchlevel\EventSourcingAdminBundle\Listener;
+namespace Patchlevel\EventSourcingDashboardBundle\Listener;
 
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 

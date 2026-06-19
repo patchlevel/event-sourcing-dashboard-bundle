@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Patchlevel\EventSourcingAdminBundle\DependencyInjection;
+namespace Patchlevel\EventSourcingDashboardBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -12,7 +12,7 @@ final class Configuration implements ConfigurationInterface
     /** @return TreeBuilder<'array'> */
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder('patchlevel_event_sourcing_admin');
+        $treeBuilder = new TreeBuilder('patchlevel_event_sourcing_dashboard');
 
         // @codingStandardsIgnoreStart
         $rootNode = $treeBuilder->getRootNode();

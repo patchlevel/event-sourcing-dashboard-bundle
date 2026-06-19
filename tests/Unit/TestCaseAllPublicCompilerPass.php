@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Patchlevel\EventSourcingAdminBundle\Tests\Unit;
+namespace Patchlevel\EventSourcingDashboardBundle\Tests\Unit;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class TestCaseAllPublicCompilerPass implements CompilerPassInterface
 {
-    private const SERVICE_PREFIX = 'event_sourcing_admin.';
+    private const SERVICE_PREFIX = 'event_sourcing_dashboard.';
     private const SERVICE_PREFIX_BUNDLE = 'event_sourcing.';
-    private const NAMESPACE_PREFIX = 'Patchlevel\\EventSourcingAdmin';
+    private const NAMESPACE_PREFIX = 'Patchlevel\\EventSourcingDashboard';
     private const NAMESPACE_PREFIX_BUNDLE = 'Patchlevel\\EventSourcing';
 
     public function process(ContainerBuilder $container): void

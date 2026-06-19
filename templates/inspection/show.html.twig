@@ -1,4 +1,4 @@
-{% extends '@PatchlevelEventSourcingAdmin/layout.html.twig' %}
+{% extends '@PatchlevelEventSourcingDashboard/layout.html.twig' %}
 
 {% block content %}
     <div class="px-4 sm:px-6 lg:px-8">
@@ -9,13 +9,13 @@
             {% if until %}
                 <a class="inline-flex items-center gap-x-1.5 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                    title="Stop time travel"
-                   href="{{ path('patchlevel_event_sourcing_admin_inspection_show', { aggregateId: aggregateId, aggregateName: aggregateName, tab: tab}) }}">
+                   href="{{ path('patchlevel_event_sourcing_dashboard_inspection_show', { aggregateId: aggregateId, aggregateName: aggregateName, tab: tab}) }}">
                     {{ heroicon('stop', '-ml-0.5 h-5 w-5') }} Stop time travel
                 </a>
             {% else %}
             <a class="inline-flex items-center gap-x-1.5 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                title="Time travel"
-               href="{{ path('patchlevel_event_sourcing_admin_inspection_show', { aggregateId: aggregateId, aggregateName: aggregateName, tab: tab, until: 1 }) }}#1">
+               href="{{ path('patchlevel_event_sourcing_dashboard_inspection_show', { aggregateId: aggregateId, aggregateName: aggregateName, tab: tab, until: 1 }) }}#1">
                 {{ heroicon('clock', '-ml-0.5 h-5 w-5') }} Time travel
             </a>
             {% endif %}
@@ -36,19 +36,19 @@
                         </div>
                         <div class="flex gap-2">
                             {% if aggregate.playhead != 1 %}
-                                <a href="{{ path('patchlevel_event_sourcing_admin_inspection_show', { aggregateId: aggregateId, aggregateName: aggregateName, tab: tab, until: until - 1 }) }}#{{ until - 1 }}"
+                                <a href="{{ path('patchlevel_event_sourcing_dashboard_inspection_show', { aggregateId: aggregateId, aggregateName: aggregateName, tab: tab, until: until - 1 }) }}#{{ until - 1 }}"
                                    class="rounded-md bg-white/10 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-white/20">
                                     {{ heroicon('backward', '-ml-0.5 h-5 w-5') }}
                                 </a>
                             {% endif %}
 
-                            <a href="{{ path('patchlevel_event_sourcing_admin_inspection_show', { aggregateId: aggregateId, aggregateName: aggregateName, tab: tab }) }}"
+                            <a href="{{ path('patchlevel_event_sourcing_dashboard_inspection_show', { aggregateId: aggregateId, aggregateName: aggregateName, tab: tab }) }}"
                                class="rounded-md bg-white/10 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-white/20">
                                 {{ heroicon('stop', '-ml-0.5 h-5 w-5') }}
                             </a>
 
                             {% if aggregate.playhead < count %}
-                                <a href="{{ path('patchlevel_event_sourcing_admin_inspection_show', { aggregateId: aggregateId, aggregateName: aggregateName, tab: tab, until: until + 1 }) }}#{{ until + 1 }}"
+                                <a href="{{ path('patchlevel_event_sourcing_dashboard_inspection_show', { aggregateId: aggregateId, aggregateName: aggregateName, tab: tab, until: until + 1 }) }}#{{ until + 1 }}"
                                    class="rounded-md bg-white/10 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-white/20">
                                     {{ heroicon('forward', '-ml-0.5 h-5 w-5') }}
                                 </a>
@@ -68,11 +68,11 @@
                                 'snapshot': 'Snapshot',
                             } %}
                                 {% if key == tab %}
-                                    <a href="{{ path('patchlevel_event_sourcing_admin_inspection_show', { aggregateId: aggregateId, aggregateName: aggregateName, tab: key, until: until }) }}{% if until %}#{{ until }}{% endif %}"
+                                    <a href="{{ path('patchlevel_event_sourcing_dashboard_inspection_show', { aggregateId: aggregateId, aggregateName: aggregateName, tab: key, until: until }) }}{% if until %}#{{ until }}{% endif %}"
                                        class="bg-gray-100 text-gray-700 rounded-md px-3 py-2 text-sm font-medium"
                                        aria-current="page">{{ label }}</a>
                                 {% else %}
-                                    <a href="{{ path('patchlevel_event_sourcing_admin_inspection_show', { aggregateId: aggregateId, aggregateName: aggregateName, tab: key, until: until }) }}{% if until %}#{{ until }}{% endif %}"
+                                    <a href="{{ path('patchlevel_event_sourcing_dashboard_inspection_show', { aggregateId: aggregateId, aggregateName: aggregateName, tab: key, until: until }) }}{% if until %}#{{ until }}{% endif %}"
                                        class="text-gray-500 hover:text-gray-700 rounded-md px-3 py-2 text-sm font-medium">{{ label }}</a>
                                 {% endif %}
                             {% endfor %}
@@ -184,7 +184,7 @@
                                                                 data-modal="modal-{{ loop.index }}">
                                                             {{ heroicon('magnifying-glass', 'h-5 w-5 inline') }}
                                                         </button>
-                                                        <a href="{{ path('patchlevel_event_sourcing_admin_inspection_show', { aggregateId: aggregateId, aggregateName: aggregateName, tab: tab, until: eventsourcing_playhead(message) }) }}#{{ eventsourcing_playhead(message) }}"
+                                                        <a href="{{ path('patchlevel_event_sourcing_dashboard_inspection_show', { aggregateId: aggregateId, aggregateName: aggregateName, tab: tab, until: eventsourcing_playhead(message) }) }}#{{ eventsourcing_playhead(message) }}"
                                                            class="text-gray-500 hover:text-gray-900 invisible group-hover/message:visible"
                                                         >
                                                             {{ heroicon('play-pause', 'h-5 w-5 inline') }}
@@ -198,7 +198,7 @@
                                                             </button>
                                                         </form>
 
-                                                        {{ include('@PatchlevelEventSourcingAdmin/store/detail.html.twig', {
+                                                        {{ include('@PatchlevelEventSourcingDashboard/store/detail.html.twig', {
                                                             message: message,
                                                         }) }}
                                                     </dialog>

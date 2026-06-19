@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Patchlevel\EventSourcingAdminBundle\Controller;
+namespace Patchlevel\EventSourcingDashboardBundle\Controller;
 
 use Patchlevel\EventSourcing\Aggregate\AggregateHeader;
 use Patchlevel\EventSourcing\Aggregate\AggregateRoot;
@@ -62,7 +62,7 @@ final class InspectionController
             }
 
             return new RedirectResponse(
-                $this->router->generate('patchlevel_event_sourcing_admin_inspection_show', [
+                $this->router->generate('patchlevel_event_sourcing_dashboard_inspection_show', [
                     'aggregateName' => $aggregateName,
                     'aggregateId' => $aggregateId,
                 ]),
@@ -70,7 +70,7 @@ final class InspectionController
         }
 
         return new Response(
-            $this->twig->render('@PatchlevelEventSourcingAdmin/inspection/index.html.twig', [
+            $this->twig->render('@PatchlevelEventSourcingDashboard/inspection/index.html.twig', [
                 'aggregates' => $this->aggregateRootRegistry->aggregateNames(),
             ]),
         );
@@ -109,7 +109,7 @@ final class InspectionController
 
         if (count($result) === 1) {
             return new RedirectResponse(
-                $this->router->generate('patchlevel_event_sourcing_admin_inspection_show', [
+                $this->router->generate('patchlevel_event_sourcing_dashboard_inspection_show', [
                     'aggregateName' => $result[0]['name'],
                     'aggregateId' => $result[0]['id'],
                 ]),
@@ -117,7 +117,7 @@ final class InspectionController
         }
 
         return new Response(
-            $this->twig->render('@PatchlevelEventSourcingAdmin/inspection/select.html.twig', [
+            $this->twig->render('@PatchlevelEventSourcingDashboard/inspection/select.html.twig', [
                 'stream' => $stream,
                 'result' => $result,
             ]),
@@ -161,7 +161,7 @@ final class InspectionController
         }
 
         return new Response(
-            $this->twig->render('@PatchlevelEventSourcingAdmin/inspection/show.html.twig', [
+            $this->twig->render('@PatchlevelEventSourcingDashboard/inspection/show.html.twig', [
                 'messages' => $messages,
                 'aggregate' => $aggregate,
                 'aggregateName' => $aggregateName,

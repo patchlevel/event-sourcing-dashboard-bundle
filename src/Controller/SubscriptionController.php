@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Patchlevel\EventSourcingAdminBundle\Controller;
+namespace Patchlevel\EventSourcingDashboardBundle\Controller;
 
 use Patchlevel\EventSourcing\Store\Store;
 use Patchlevel\EventSourcing\Subscription\Engine\SubscriptionEngine;
@@ -67,7 +67,7 @@ final class SubscriptionController
         }
 
         return new Response(
-            $this->twig->render('@PatchlevelEventSourcingAdmin/subscription/show.html.twig', [
+            $this->twig->render('@PatchlevelEventSourcingDashboard/subscription/show.html.twig', [
                 'subscriptions' => $filteredSubscriptions,
                 'messageCount' => $messageCount,
                 'statuses' => array_map(static fn (Status $status) => $status->value, Status::cases()),
@@ -86,7 +86,7 @@ final class SubscriptionController
 
         return new RedirectResponse(
             $this->router->generate(
-                'patchlevel_event_sourcing_admin_subscription_show',
+                'patchlevel_event_sourcing_dashboard_subscription_show',
                 $request->query->all(),
             ),
         );
@@ -100,7 +100,7 @@ final class SubscriptionController
 
         return new RedirectResponse(
             $this->router->generate(
-                'patchlevel_event_sourcing_admin_subscription_show',
+                'patchlevel_event_sourcing_dashboard_subscription_show',
                 $request->query->all(),
             ),
         );
@@ -114,7 +114,7 @@ final class SubscriptionController
 
         return new RedirectResponse(
             $this->router->generate(
-                'patchlevel_event_sourcing_admin_subscription_show',
+                'patchlevel_event_sourcing_dashboard_subscription_show',
                 $request->query->all(),
             ),
         );
@@ -128,7 +128,7 @@ final class SubscriptionController
 
         return new RedirectResponse(
             $this->router->generate(
-                'patchlevel_event_sourcing_admin_subscription_show',
+                'patchlevel_event_sourcing_dashboard_subscription_show',
                 $request->query->all(),
             ),
         );
@@ -142,7 +142,7 @@ final class SubscriptionController
 
         return new RedirectResponse(
             $this->router->generate(
-                'patchlevel_event_sourcing_admin_subscription_show',
+                'patchlevel_event_sourcing_dashboard_subscription_show',
                 $request->query->all(),
             ),
         );
@@ -156,7 +156,7 @@ final class SubscriptionController
 
         return new RedirectResponse(
             $this->router->generate(
-                'patchlevel_event_sourcing_admin_subscription_show',
+                'patchlevel_event_sourcing_dashboard_subscription_show',
                 $request->query->all(),
             ),
         );
@@ -170,7 +170,7 @@ final class SubscriptionController
 
         return new RedirectResponse(
             $this->router->generate(
-                'patchlevel_event_sourcing_admin_subscription_show',
+                'patchlevel_event_sourcing_dashboard_subscription_show',
                 $request->query->all(),
             ),
         );

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Patchlevel\EventSourcingAdminBundle\Listener;
+namespace Patchlevel\EventSourcingDashboardBundle\Listener;
 
-use Patchlevel\EventSourcingAdminBundle\TokenMapper;
+use Patchlevel\EventSourcingDashboardBundle\TokenMapper;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 final class TokenMapperListener
