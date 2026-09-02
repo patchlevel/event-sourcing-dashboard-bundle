@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Patchlevel\EventSourcingDashboardBundle\Tests\Unit;
 
 use Patchlevel\EventSourcing\Metadata\Message\MessageHeaderRegistry;
+use Patchlevel\EventSourcingDashboardBundle\Controller\DashboardController;
 use Patchlevel\EventSourcingDashboardBundle\Controller\DefaultController;
 use Patchlevel\EventSourcingDashboardBundle\Controller\EventController;
 use Patchlevel\EventSourcingDashboardBundle\Controller\InspectionController;
@@ -32,6 +33,7 @@ class PatchlevelEventSourcingBundleTest extends TestCase
 
         $container->compile();
 
+        self::assertFalse($container->has(DashboardController::class));
         self::assertFalse($container->has(DefaultController::class));
         self::assertFalse($container->has(EventController::class));
         self::assertFalse($container->has(InspectionController::class));
@@ -51,6 +53,7 @@ class PatchlevelEventSourcingBundleTest extends TestCase
             ]
         );
 
+        self::assertTrue($container->has(DashboardController::class));
         self::assertTrue($container->has(DefaultController::class));
         self::assertTrue($container->has(EventController::class));
         self::assertTrue($container->has(InspectionController::class));

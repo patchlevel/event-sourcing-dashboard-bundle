@@ -5,6 +5,7 @@
     {
       "title": "Dashboard",
       "subEntries": [
+        { "title": "Dashboard", "file": "dashboard.md" },
         { "title": "Store", "file": "store.md" },
         { "title": "Inspection", "file": "inspection.md" },
         { "title": "Events", "file": "events.md" },

@@ -18,7 +18,7 @@ final class DefaultController
     public function indexAction(): Response
     {
         return new RedirectResponse(
-            $this->router->generate('patchlevel_event_sourcing_dashboard_store_show'),
+            $this->router->generate('patchlevel_event_sourcing_dashboard_dashboard_index'),
         );
     }
 }

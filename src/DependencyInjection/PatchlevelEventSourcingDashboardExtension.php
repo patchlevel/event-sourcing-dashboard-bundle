@@ -13,6 +13,7 @@ use Patchlevel\EventSourcing\Serializer\EventSerializer;
 use Patchlevel\EventSourcing\Snapshot\SnapshotStore;
 use Patchlevel\EventSourcing\Store\Store;
 use Patchlevel\EventSourcing\Subscription\Engine\SubscriptionEngine;
+use Patchlevel\EventSourcingDashboardBundle\Controller\DashboardController;
 use Patchlevel\EventSourcingDashboardBundle\Controller\DefaultController;
 use Patchlevel\EventSourcingDashboardBundle\Controller\EventController;
 use Patchlevel\EventSourcingDashboardBundle\Controller\InspectionController;
@@ -58,6 +59,16 @@ final class PatchlevelEventSourcingDashboardExtension extends Extension
         $container->register(DefaultController::class)
             ->setArguments([
                 new Reference(RouterInterface::class),
+            ])
+            ->addTag('controller.service_arguments');
+
+        $container->register(DashboardController::class)
+            ->setArguments([
+                new Reference('twig'),
+                new Reference(Store::class),
+                new Reference(AggregateRootRegistry::class),
+                new Reference(EventRegistry::class),
+                new Reference(SubscriptionEngine::class),
             ])
             ->addTag('controller.service_arguments');
 
