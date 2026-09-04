@@ -1,7 +1,7 @@
 {% extends '@PatchlevelEventSourcingDashboard/base.html.twig' %}
 
 {% block body %}
-    <div id="sidebar-backdrop" class="fixed inset-0 z-40 hidden bg-slate-950/70 backdrop-blur-sm lg:hidden" aria-hidden="true"></div>
+    <div id="sidebar-backdrop" class="fixed inset-0 z-40 hidden bg-slate-950/70 backdrop-blur-xs lg:hidden" aria-hidden="true"></div>
 
     <aside id="sidebar" aria-label="Main navigation"
            class="fixed inset-y-0 left-0 z-50 flex w-72 -translate-x-full flex-col border-r border-slate-800 bg-slate-900 transition-transform duration-200 ease-out motion-reduce:transition-none lg:translate-x-0 light:border-slate-200 light:bg-white">
@@ -13,7 +13,7 @@
                 <div class="truncate text-xs text-gray-400 light:text-slate-500">Dashboard</div>
             </div>
             <button type="button" data-sidebar-toggle aria-label="Close navigation" aria-expanded="false" aria-controls="sidebar"
-                    class="-mr-2 ml-auto rounded-md p-1.5 text-gray-400 hover:bg-slate-800 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light lg:hidden light:text-slate-500 light:hover:bg-slate-100 light:hover:text-slate-900">
+                    class="-mr-2 ml-auto rounded-md p-1.5 text-gray-400 hover:bg-slate-800 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light lg:hidden light:text-slate-500 hover:light:bg-slate-100 hover:light:text-slate-900">
                 {{ heroicon('x-mark', 'h-5 w-5') }}
             </button>
         </div>
@@ -47,7 +47,7 @@
                 </div>
             </div>
             <a href="https://patchlevel.de" target="_blank" rel="noreferrer"
-               class="block truncate rounded text-xs text-gray-500 transition-colors hover:text-gray-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light light:text-slate-500 light:hover:text-slate-800">
+               class="block truncate rounded-sm text-xs text-gray-500 transition-colors hover:text-gray-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light light:text-slate-500 hover:light:text-slate-800">
                 made by patchlevel
             </a>
         </div>
@@ -55,7 +55,7 @@
 
     <div class="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-slate-800 bg-slate-900 px-4 lg:hidden light:border-slate-200 light:bg-white">
         <button type="button" data-sidebar-toggle aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar"
-                class="-ml-2 rounded-md p-1.5 text-gray-300 hover:bg-slate-800 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light light:text-slate-600 light:hover:bg-slate-100 light:hover:text-slate-900">
+                class="-ml-2 rounded-md p-1.5 text-gray-300 hover:bg-slate-800 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light light:text-slate-600 hover:light:bg-slate-100 hover:light:text-slate-900">
             {{ heroicon('bars-3', 'h-6 w-6') }}
         </button>
         <img class="h-7 w-7 light:hidden" src="{{ asset('bundles/patchleveleventsourcingdashboard/logo.png') }}" alt="" width="28" height="28">
@@ -64,7 +64,7 @@
     </div>
 
     <main class="lg:pl-72">
-        <div class="mx-auto max-w-screen-2xl px-4 py-8 sm:px-6 lg:px-10 wide:max-w-none">
+        <div class="mx-auto max-w-(--breakpoint-2xl) px-4 py-8 sm:px-6 lg:px-10 wide:max-w-none">
             {% block content %}{% endblock %}
         </div>
     </main>
@@ -75,7 +75,7 @@
     {% set active = app.request.pathInfo starts with url %}
     <li>
         <a href="{{ url }}" {% if active %}aria-current="page"{% endif %}
-           class="{{ active ? 'bg-blue-950 light:bg-blue-50 text-primary-light' : 'text-gray-400 hover:bg-slate-800 hover:text-white light:text-slate-600 light:hover:bg-slate-100 light:hover:text-slate-900' }} group flex items-center gap-x-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light">
+           class="{{ active ? 'bg-blue-950 light:bg-blue-50 text-primary-light' : 'text-gray-400 hover:bg-slate-800 hover:text-white light:text-slate-600 hover:light:bg-slate-100 hover:light:text-slate-900' }} group flex items-center gap-x-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light">
             {{ heroicon(icon, 'h-5 w-5 shrink-0') }}
             {{ label }}
         </a>
@@ -84,7 +84,7 @@
 
 {% macro pref_option(pref, value, icon, label) %}
     <button type="button" role="radio" aria-checked="false" data-pref="{{ pref }}" data-value="{{ value }}" aria-label="{{ label }}" title="{{ label }}"
-            class="rounded-md p-1.5 text-gray-400 transition-colors hover:text-white aria-checked:bg-slate-700 aria-checked:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light light:text-slate-500 light:hover:text-slate-900 light:aria-checked:bg-white light:aria-checked:text-slate-900 light:aria-checked:shadow-sm">
+            class="rounded-md p-1.5 text-gray-400 transition-colors hover:text-white aria-checked:bg-slate-700 aria-checked:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light light:text-slate-500 hover:light:text-slate-900 aria-checked:light:bg-white aria-checked:light:text-slate-900 aria-checked:light:shadow-xs">
         {{ heroicon(icon, 'h-4 w-4') }}
     </button>
 {% endmacro %}

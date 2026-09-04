@@ -39,7 +39,7 @@
         </div>
     </form>
 
-    <div class="mt-6 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900 light:border-slate-200 light:bg-white light:shadow-sm">
+    <div class="mt-6 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900 light:border-slate-200 light:bg-white light:shadow-xs">
         {% set td = 'whitespace-nowrap px-4 py-3 text-sm text-gray-300 light:text-slate-600' %}
         <div class="relative overflow-x-auto">
             <table class="min-w-full divide-y divide-slate-800 light:divide-slate-200">
@@ -61,7 +61,7 @@
                 <tbody class="divide-y divide-slate-800 light:divide-slate-100">
                 {% for message in messages %}
                     {% set dialog = 'message-' ~ loop.index %}
-                    <tr class="transition-colors hover:bg-slate-800 light:hover:bg-slate-50">
+                    <tr class="transition-colors hover:bg-slate-800 hover:light:bg-slate-50">
                         <td class="{{ td }} text-right font-mono text-xs tabular-nums text-gray-500 light:text-slate-400">{{ messages.index }}</td>
 
                         {% if eventsourcing_uses_stream_store() %}

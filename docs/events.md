@@ -67,7 +67,7 @@ The arguments are:
 * `description`: the text shown for the event, with support for expressions and light markdown (see
   below).
 * `icon`: the name of a [Heroicon](https://heroicons.com), for example `user-plus` or `bolt`.
-* `color`: a color for the icon, either a `Color` enum case or a hex string like `#22c55e`.
+* `color`: a color for the icon, either a `Color` enum case or a hex string like `#00c950`.
 * `size`: an optional size hint for the icon.
 
 ### Dynamic descriptions

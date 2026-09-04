@@ -8,7 +8,7 @@
     {{ ui.subtitle('Your event sourcing setup at a glance.') }}
 
     {# One strip, four cells: the numbers read as one system, not four widgets. #}
-    <div class="mt-8 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-slate-800 bg-slate-800 sm:grid-cols-2 lg:grid-cols-4 light:border-slate-200 light:bg-slate-200 light:shadow-sm">
+    <div class="mt-8 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-slate-800 bg-slate-800 sm:grid-cols-2 lg:grid-cols-4 light:border-slate-200 light:bg-slate-200 light:shadow-xs">
         {{ _self.stat('Events in store', messageCount, 'circle-stack', 'bg-blue-950 light:bg-blue-50 text-primary-light', path('patchlevel_event_sourcing_dashboard_store_show')) }}
         {{ _self.stat('Aggregates', aggregateCount, 'identification', 'bg-violet-950 light:bg-violet-50 text-secondary-light', path('patchlevel_event_sourcing_dashboard_inspection_index')) }}
         {{ _self.stat('Registered events', eventCount, 'calendar', 'bg-cyan-950 light:bg-cyan-50 text-tertiary-light', path('patchlevel_event_sourcing_dashboard_event_index')) }}
@@ -36,7 +36,7 @@
                     gray: 'border-slate-700 bg-slate-800 text-gray-500 light:border-slate-200 light:bg-transparent light:text-slate-400',
                 } %}
                 <a href="{{ path('patchlevel_event_sourcing_dashboard_subscription_show', { status: status }) }}"
-                   class="{{ tones[tone] }} inline-flex items-center gap-x-2 rounded-lg border px-3 py-1.5 text-sm font-medium capitalize transition-colors hover:brightness-125 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light light:hover:brightness-95">
+                   class="{{ tones[tone] }} inline-flex items-center gap-x-2 rounded-lg border px-3 py-1.5 text-sm font-medium capitalize transition-colors hover:brightness-125 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light hover:light:brightness-95">
                     {{ status }}
                     <span class="font-mono text-base tabular-nums">{{ count }}</span>
                 </a>
@@ -48,12 +48,12 @@
         <div class="flex items-end justify-between gap-4">
             {{ ui.section_title('Latest events') }}
             <a href="{{ path('patchlevel_event_sourcing_dashboard_store_show') }}"
-               class="inline-flex items-center gap-1 rounded text-sm font-medium text-primary-light transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light light:hover:text-primary">
+               class="inline-flex items-center gap-1 rounded-sm text-sm font-medium text-primary-light transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light hover:light:text-primary">
                 Open the store {{ heroicon('arrow-right', 'h-4 w-4') }}
             </a>
         </div>
 
-        <div class="relative mt-4 overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900 light:border-slate-200 light:bg-white light:shadow-sm">
+        <div class="relative mt-4 overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900 light:border-slate-200 light:bg-white light:shadow-xs">
             {% set td = 'whitespace-nowrap px-4 py-3 text-sm text-gray-300 light:text-slate-600' %}
             <table class="min-w-full divide-y divide-slate-800 light:divide-slate-200">
                 <thead class="bg-slate-800 light:bg-slate-50">
@@ -71,7 +71,7 @@
                 </thead>
                 <tbody class="divide-y divide-slate-800 light:divide-slate-100">
                 {% for message in messages %}
-                    <tr class="transition-colors hover:bg-slate-800 light:hover:bg-slate-50">
+                    <tr class="transition-colors hover:bg-slate-800 hover:light:bg-slate-50">
                         {% if eventsourcing_uses_stream_store() %}
                             <td class="{{ td }} group/parent font-medium text-white light:text-slate-900">
                                 {{ eventsourcing_stream_name(message) }}
@@ -107,7 +107,7 @@
 
 {% macro stat(label, value, icon, tile, url) %}
     <a href="{{ url }}"
-       class="group flex items-center justify-between gap-4 bg-slate-900 p-5 transition-colors hover:bg-slate-800 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary-light light:bg-white light:hover:bg-slate-50">
+       class="group flex items-center justify-between gap-4 bg-slate-900 p-5 transition-colors hover:bg-slate-800 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary-light light:bg-white hover:light:bg-slate-50">
         <div class="min-w-0">
             <div class="truncate text-sm text-gray-400 light:text-slate-500">{{ label }}</div>
             <div class="mt-1 font-mono text-3xl font-semibold tabular-nums text-white light:text-slate-900">{{ value }}</div>

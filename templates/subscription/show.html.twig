@@ -39,7 +39,7 @@
         </div>
     </form>
 
-    <div class="relative mt-6 overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900 light:border-slate-200 light:bg-white light:shadow-sm">
+    <div class="relative mt-6 overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900 light:border-slate-200 light:bg-white light:shadow-xs">
         {% set td = 'whitespace-nowrap px-4 py-3 text-sm text-gray-300 light:text-slate-600' %}
         <table class="min-w-full divide-y divide-slate-800 light:divide-slate-200">
             <thead class="bg-slate-800 light:bg-slate-50">
@@ -59,7 +59,7 @@
                 {% set behind = subscription.position < messageCount %}
                 {% set params = app.request.query.all|merge({ id: subscription.id }) %}
                 {% set dialog = 'subscription-' ~ loop.index %}
-                <tr class="transition-colors hover:bg-slate-800 light:hover:bg-slate-50">
+                <tr class="transition-colors hover:bg-slate-800 hover:light:bg-slate-50">
                     <td class="{{ td }} font-medium text-white light:text-slate-900">{{ subscription.id }}</td>
                     <td class="{{ td }}">{{ subscription.group }}</td>
                     <td class="{{ td }}">{{ subscription.runMode.value|replace({'_': ' '}) }}</td>

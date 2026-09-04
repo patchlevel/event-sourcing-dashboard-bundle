@@ -7,12 +7,12 @@
     {{ ui.title('Inspection') }}
     {{ ui.subtitle(result|length == 1 ? 'One aggregate matches the stream.' : (result|length ~ ' aggregates match the stream ' ~ stream ~ '. Pick one.')) }}
 
-    <div class="mt-8 max-w-xl overflow-hidden rounded-2xl border border-slate-800 bg-slate-900 light:border-slate-200 light:bg-white light:shadow-sm">
+    <div class="mt-8 max-w-xl overflow-hidden rounded-2xl border border-slate-800 bg-slate-900 light:border-slate-200 light:bg-white light:shadow-xs">
         <ul role="list" class="divide-y divide-slate-800 light:divide-slate-100">
             {% for option in result %}
                 <li>
                     <a data-add-hash href="{{ path('patchlevel_event_sourcing_dashboard_inspection_show', { aggregateName: option.name, aggregateId: option.id }) }}"
-                       class="flex items-center justify-between gap-4 px-5 py-4 transition-colors hover:bg-slate-800 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary-light light:hover:bg-slate-50">
+                       class="flex items-center justify-between gap-4 px-5 py-4 transition-colors hover:bg-slate-800 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary-light hover:light:bg-slate-50">
                         <div class="min-w-0">
                             <div class="text-sm font-semibold text-white light:text-slate-900">{{ option.name }}</div>
                             <div class="mt-0.5 truncate font-mono text-xs text-gray-400 light:text-slate-500">{{ option.id }}</div>

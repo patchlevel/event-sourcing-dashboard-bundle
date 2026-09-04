@@ -20,7 +20,7 @@
                 <div class="overflow-hidden rounded-xl border border-red-900 light:border-red-200">
                     <div class="flex gap-3 bg-red-950 px-4 py-3 text-sm text-red-300 light:bg-red-50 light:text-red-800">
                         {{ heroicon('exclamation-circle', 'h-5 w-5 shrink-0') }}
-                        <p class="min-w-0 break-words font-medium">{{ context.message }}</p>
+                        <p class="min-w-0 wrap-break-word font-medium">{{ context.message }}</p>
                     </div>
 
                     {% if context.trace %}

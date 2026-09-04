@@ -5,30 +5,34 @@ declare(strict_types=1);
 namespace Patchlevel\EventSourcingDashboardBundle;
 
 /**
- * tailwindcss 700 colors
+ * Tailwind CSS 500 shades (v4 palette, as sRGB hex)
  */
 enum Color: string
 {
-    case Slate = '#64748b';
-    case Gray = '#6b7280';
-    case Zinc = '#71717a';
+    case Slate = '#62748e';
+    case Gray = '#6a7282';
+    case Zinc = '#71717b';
     case Neutral = '#737373';
-    case Stone = '#78716c';
-    case Red = '#ef4444';
-    case Orange = '#f97316';
-    case Amber = '#f59e0b';
-    case Yellow = '#eab308';
-    case Lime = '#84cc16';
-    case Green = '#22c55e';
-    case Emerald = '#10b981';
-    case Teal = '#14b8a6';
-    case Cyan = '#06b6d4';
-    case Sky = '#0ea5e9';
-    case Blue = '#3b82f6';
-    case Indigo = '#6366f1';
-    case Violet = '#8b5cf6';
-    case Purple = '#a855f7';
-    case Fuchsia = '#d946ef';
-    case Pink = '#ec4899';
-    case Rose = '#f43f5e';
+    case Stone = '#79716b';
+    case Mauve = '#79697b';
+    case Olive = '#7c7c67';
+    case Mist = '#67787c';
+    case Taupe = '#7c6d67';
+    case Red = '#fb2c36';
+    case Orange = '#ff6900';
+    case Amber = '#fe9a00';
+    case Yellow = '#f0b100';
+    case Lime = '#7ccf00';
+    case Green = '#00c950';
+    case Emerald = '#00bc7d';
+    case Teal = '#00bba7';
+    case Cyan = '#00b8db';
+    case Sky = '#00a6f4';
+    case Blue = '#2b7fff';
+    case Indigo = '#615fff';
+    case Violet = '#8e51ff';
+    case Purple = '#ad46ff';
+    case Fuchsia = '#e12afb';
+    case Pink = '#f6339a';
+    case Rose = '#ff2056';
 }
