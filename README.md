@@ -54,4 +54,11 @@ composer require --dev patchlevel/event-sourcing-dashboard-bundle
 We are open to contributions as long as they are in line with
 our [BC-Policy](https://patchlevel.dev/backward-compatibility-promise).
 
+In addition to the general policy, the following rules apply to this bundle:
+
+* **Twig templates are not covered.** Symfony allows overriding the templates of a bundle, but our templates,
+  their names, blocks and variables can change in any release without notice.
+* **Controller internals are not covered.** The controller classes, their methods and signatures are considered
+  internal. The routes they serve (route names and paths) are covered by the BC-Policy.
+
 Also note that the `composer.lock` is always generated with the newest supported PHP version as this is the version our tools run in the CI.
