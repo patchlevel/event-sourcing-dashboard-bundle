@@ -1,0 +1,161 @@
+{# Shared building blocks. Import with: {% import '@PatchlevelEventSourcingDashboard/components.html.twig' as ui %} #}
+
+{% macro title(text) %}
+    <h1 class="text-2xl font-bold tracking-tight text-white light:text-slate-900">{{ text }}</h1>
+{% endmacro %}
+
+{% macro subtitle(text) %}
+    <p class="mt-1 text-sm text-gray-400 light:text-slate-500">{{ text }}</p>
+{% endmacro %}
+
+{% macro section_title(text) %}
+    <h2 class="text-base font-semibold text-white light:text-slate-900">{{ text }}</h2>
+{% endmacro %}
+
+{#- ---- Form controls ------------------------------------------------- -#}
+
+{% macro label(for, text) %}
+    <label for="{{ for }}" class="block text-xs font-medium text-gray-400 light:text-slate-600">{{ text }}</label>
+{% endmacro %}
+
+{% macro input(name, value, placeholder, required = false) %}
+    <input type="text" name="{{ name }}" id="{{ name }}" value="{{ value }}" placeholder="{{ placeholder }}" {% if required %}required{% endif %}
+           class="form-input mt-1 block w-full rounded-lg border-slate-800 bg-slate-900 px-3 py-1.5 font-mono text-sm text-white placeholder:text-gray-500 focus:border-primary-light focus:ring-primary-light light:border-slate-300 light:bg-white light:text-slate-900 light:placeholder:text-slate-400">
+{% endmacro %}
+
+{% macro select(name, options, selected, labels = {}, required = false, placeholder = 'All') %}
+    <select name="{{ name }}" id="{{ name }}" {% if required %}required{% endif %}
+            class="form-select mt-1 block w-full rounded-lg border-slate-800 bg-slate-900 py-1.5 pl-3 pr-10 text-sm text-white focus:border-primary-light focus:ring-primary-light light:border-slate-300 light:bg-white light:text-slate-900">
+        <option value="" {% if selected == '' %}selected{% endif %}>{{ placeholder }}</option>
+        {% for option in options %}
+            <option value="{{ option }}" {% if selected == option %}selected{% endif %}>{{ labels[option] ?? option }}</option>
+        {% endfor %}
+    </select>
+{% endmacro %}
+
+{#- ---- Buttons ------------------------------------------------------- -#}
+
+{% macro button_primary(text, icon = null, type = 'submit') %}
+    <button type="{{ type }}" class="inline-flex items-center gap-x-1.5 rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light">
+        {% if icon %}{{ heroicon(icon, '-ml-0.5 h-4 w-4') }}{% endif %}{{ text }}
+    </button>
+{% endmacro %}
+
+{% macro link_primary(url, text, icon = null, title = null) %}
+    <a href="{{ url }}" {% if title %}title="{{ title }}"{% endif %} class="inline-flex items-center gap-x-1.5 rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light">
+        {% if icon %}{{ heroicon(icon, '-ml-0.5 h-4 w-4') }}{% endif %}{{ text }}
+    </a>
+{% endmacro %}
+
+{% macro link_secondary(url, text, icon = null, title = null) %}
+    <a href="{{ url }}" {% if title %}title="{{ title }}"{% endif %} class="inline-flex items-center gap-x-1.5 rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light light:border-slate-300 light:bg-slate-100 light:text-slate-900 light:hover:bg-slate-200">
+        {% if icon %}{{ heroicon(icon, '-ml-0.5 h-4 w-4') }}{% endif %}{{ text }}
+    </a>
+{% endmacro %}
+
+{# Icon-only control inside a row: always visible, labelled for screen readers. #}
+{% macro icon_link(url, icon, title) %}
+    <a href="{{ url }}" title="{{ title }}" aria-label="{{ title }}" class="inline-flex rounded-md p-1 text-gray-400 transition-colors hover:bg-slate-800 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light light:text-slate-500 light:hover:bg-slate-100 light:hover:text-slate-900">
+        {{ heroicon(icon, 'h-4 w-4') }}
+    </a>
+{% endmacro %}
+
+{# Secondary navigation next to a value: revealed on hover of the enclosing .group/parent, always reachable by keyboard. #}
+{% macro row_action(url, icon, title) %}
+    <a href="{{ url }}" title="{{ title }}" aria-label="{{ title }}" class="inline-flex rounded p-0.5 align-middle text-gray-500 opacity-0 transition-opacity hover:text-white focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light group-hover/parent:opacity-100 light:hover:text-slate-900">
+        {{ heroicon(icon, 'h-4 w-4') }}
+    </a>
+{% endmacro %}
+
+{% macro clipboard(text) %}
+    <button type="button" data-clipboard="{{ text }}" title="Copy" aria-label="Copy to clipboard" class="group/copy inline-flex rounded p-0.5 align-middle text-gray-500 opacity-0 transition-opacity hover:text-white focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light group-hover/parent:opacity-100 data-[copied]:opacity-100 light:hover:text-slate-900">
+        {{ heroicon('clipboard', 'h-4 w-4 group-data-[copied]/copy:hidden') }}
+        {{ heroicon('check', 'hidden h-4 w-4 text-green-400 group-data-[copied]/copy:inline light:text-green-600') }}
+    </button>
+{% endmacro %}
+
+{% macro dialog_button(id, title = 'Show details') %}
+    <button type="button" data-modal="{{ id }}" title="{{ title }}" aria-label="{{ title }}" class="inline-flex rounded-md p-1 text-gray-400 transition-colors hover:bg-slate-800 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light light:text-slate-500 light:hover:bg-slate-100 light:hover:text-slate-900">
+        {{ heroicon('magnifying-glass', 'h-4 w-4') }}
+    </button>
+{% endmacro %}
+
+{#- ---- Badges -------------------------------------------------------- -#}
+
+{% macro badge(text, tone = 'gray') %}
+    {% set tones = {
+        green: 'bg-green-950 text-green-400 ring-green-900 light:bg-green-50 light:text-green-700 light:ring-green-200',
+        yellow: 'bg-amber-950 text-amber-300 ring-amber-900 light:bg-amber-50 light:text-amber-800 light:ring-amber-200',
+        red: 'bg-red-950 text-red-400 ring-red-900 light:bg-red-50 light:text-red-700 light:ring-red-200',
+        blue: 'bg-blue-950 light:bg-blue-50 text-primary-light ring-blue-900 light:ring-blue-200',
+        gray: 'bg-slate-900 text-gray-400 ring-slate-700 light:bg-slate-100 light:text-slate-600 light:ring-slate-200',
+    } %}
+    <span class="{{ tones[tone] ?? tones.gray }} inline-flex items-center gap-x-1.5 rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset">
+        <span class="h-1.5 w-1.5 rounded-full bg-current" aria-hidden="true"></span>
+        {{ text }}
+    </span>
+{% endmacro %}
+
+{% macro status_tone(status) -%}
+    {%- if status in ['active', 'finished'] -%}green
+    {%- elseif status == 'booting' -%}yellow
+    {%- elseif status in ['error', 'failed'] -%}red
+    {%- elseif status == 'new' -%}blue
+    {%- else -%}gray
+    {%- endif -%}
+{%- endmacro %}
+
+{% macro status_badge(status) %}
+    {{ _self.badge(status|capitalize, _self.status_tone(status)|trim) }}
+{% endmacro %}
+
+{#- ---- Description lists --------------------------------------------- -#}
+
+{% macro dl_row(name, content, mono = false) %}
+    <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+        <dt class="text-sm font-medium text-gray-400 light:text-slate-500">{{ name }}</dt>
+        <dd class="break-all text-sm text-gray-200 sm:col-span-2 light:text-slate-800 {% if mono %}font-mono text-xs leading-5{% endif %}">
+            {%- if content is null or content == '' -%}
+                <span class="text-gray-500 light:text-slate-400">~</span>
+            {%- else -%}
+                {{ content }}
+            {%- endif -%}
+        </dd>
+    </div>
+{% endmacro %}
+
+{% macro dl_json(name, content) %}
+    <div class="py-3">
+        <dt class="mb-2 text-sm font-medium text-gray-400 light:text-slate-500">{{ name }}</dt>
+        <dd>
+            <div class="json">
+                {{- content -}}
+            </div>
+        </dd>
+    </div>
+{% endmacro %}
+
+{#- ---- Feedback ------------------------------------------------------ -#}
+
+{% macro empty(icon, text, hint = null) %}
+    <div class="flex flex-col items-center px-6 py-16 text-center">
+        <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-slate-800 text-gray-500 light:bg-slate-100 light:text-slate-400" aria-hidden="true">
+            {{ heroicon(icon, 'h-5 w-5') }}
+        </div>
+        <p class="text-sm font-medium text-gray-300 light:text-slate-700">{{ text }}</p>
+        {% if hint %}<p class="mt-1 text-sm text-gray-500 light:text-slate-500">{{ hint }}</p>{% endif %}
+    </div>
+{% endmacro %}
+
+{% macro error(message) %}
+    <div class="flex gap-3 rounded-xl border border-red-900 bg-red-950 p-4 text-sm text-red-300 light:border-red-200 light:bg-red-50 light:text-red-800">
+        {{ heroicon('exclamation-circle', 'h-5 w-5 shrink-0') }}
+        <p class="min-w-0 break-words">{{ message }}</p>
+    </div>
+{% endmacro %}
+
+{#- ---- Tables -------------------------------------------------------- -#}
+
+{% macro th(text, align = 'left') %}
+    <th scope="col" class="px-4 py-3 text-{{ align }} text-xs font-semibold uppercase tracking-wider text-gray-400 light:text-slate-500">{{ text }}</th>
+{% endmacro %}

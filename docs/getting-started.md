@@ -72,6 +72,13 @@ bundle assets are picked up automatically. The bundle depends on `symfony/asset`
 `symfony/asset-mapper` for this.
 :::
 
+## Appearance
+
+The dashboard follows your operating system's color scheme by default. The switches at the
+bottom of the sidebar let you pin it to light or dark, and choose between a fixed content width
+and one that fits the window. Both choices are stored in the browser's local storage, so they
+survive reloads and apply to every dashboard page.
+
 ## Open the dashboard
 
 Start your application and visit the prefix you chose:

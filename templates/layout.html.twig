@@ -1,69 +1,90 @@
 {% extends '@PatchlevelEventSourcingDashboard/base.html.twig' %}
 
 {% block body %}
-    <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
-        <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-indigo-600 px-6">
-            <div class="flex h-20 shrink-0 items-center text-indigo-200 leading-6 font-semibold">
-                EventSourcing Dashboard
+    <div id="sidebar-backdrop" class="fixed inset-0 z-40 hidden bg-slate-950/70 backdrop-blur-sm lg:hidden" aria-hidden="true"></div>
+
+    <aside id="sidebar" aria-label="Main navigation"
+           class="fixed inset-y-0 left-0 z-50 flex w-72 -translate-x-full flex-col border-r border-slate-800 bg-slate-900 transition-transform duration-200 ease-out motion-reduce:transition-none lg:translate-x-0 light:border-slate-200 light:bg-white">
+        <div class="flex h-16 shrink-0 items-center gap-3 px-6">
+            <img class="h-8 w-8 light:hidden" src="{{ asset('bundles/patchleveleventsourcingdashboard/logo.png') }}" alt="" width="32" height="32">
+            <img class="hidden h-8 w-8 light:block" src="{{ asset('bundles/patchleveleventsourcingdashboard/logo-light.png') }}" alt="" width="32" height="32">
+            <div class="min-w-0 leading-tight">
+                <div class="truncate text-sm font-semibold text-white light:text-slate-900">Event Sourcing</div>
+                <div class="truncate text-xs text-gray-400 light:text-slate-500">Dashboard</div>
             </div>
-            <nav class="flex flex-1 flex-col">
-                <ul role="list" class="flex flex-1 flex-col gap-y-7">
-                    <li>
-                        <ul role="list" class="-mx-2 space-y-1">
-                            {{ _self.nav_point("Dashboard", "home", "patchlevel_event_sourcing_dashboard_dashboard_index") }}
-                            {{ _self.nav_point("Store", "circle-stack", "patchlevel_event_sourcing_dashboard_store_show") }}
-                            {{ _self.nav_point("Inspection", "identification", "patchlevel_event_sourcing_dashboard_inspection_index") }}
-                            {{ _self.nav_point("Subscriptions", "video-camera", "patchlevel_event_sourcing_dashboard_subscription_show") }}
-                            {{ _self.nav_point("Events", "calendar", "patchlevel_event_sourcing_dashboard_event_index") }}
-                        </ul>
-                    </li>
-                    <li class="-mx-6 mt-auto">
-                        <a href="https://patchlevel.de" target="_blank"
-                           class="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-indigo-700">
-                            <img class="h-8 w-8 rounded-full bg-indigo-700"
-                                 src="{{ asset('bundles/patchleveleventsourcingdashboard/logo.png') }}" alt="">
-                            <span class="sr-only">Your profile</span>
-                            <span aria-hidden="true">made by patchlevel</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            <button type="button" data-sidebar-toggle aria-label="Close navigation" aria-expanded="false" aria-controls="sidebar"
+                    class="-mr-2 ml-auto rounded-md p-1.5 text-gray-400 hover:bg-slate-800 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light lg:hidden light:text-slate-500 light:hover:bg-slate-100 light:hover:text-slate-900">
+                {{ heroicon('x-mark', 'h-5 w-5') }}
+            </button>
         </div>
-    </div>
 
-    <div class="sticky top-0 z-40 flex items-center gap-x-6 bg-indigo-600 px-4 py-4 shadow-sm sm:px-6 lg:hidden">
-        <button type="button" class="-m-2.5 p-2.5 text-indigo-200 lg:hidden">
-            <span class="sr-only">Open sidebar</span>
-            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                 aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-            </svg>
+        <nav class="flex flex-1 flex-col overflow-y-auto px-4 py-2">
+            <ul role="list" class="space-y-1">
+                {{ _self.nav_point('Dashboard', 'home', 'patchlevel_event_sourcing_dashboard_dashboard_index') }}
+                {{ _self.nav_point('Store', 'circle-stack', 'patchlevel_event_sourcing_dashboard_store_show') }}
+                {{ _self.nav_point('Inspection', 'identification', 'patchlevel_event_sourcing_dashboard_inspection_index') }}
+                {{ _self.nav_point('Subscriptions', 'video-camera', 'patchlevel_event_sourcing_dashboard_subscription_show') }}
+                {{ _self.nav_point('Events', 'calendar', 'patchlevel_event_sourcing_dashboard_event_index') }}
+            </ul>
+        </nav>
+
+        <div class="space-y-3 border-t border-slate-800 px-6 py-4 light:border-slate-200">
+            <div class="flex items-center justify-between gap-3">
+                <span class="text-xs text-gray-500 light:text-slate-500">Theme</span>
+                <div role="radiogroup" aria-label="Color theme"
+                     class="inline-flex shrink-0 rounded-lg border border-slate-700 bg-slate-800 p-0.5 light:border-slate-200 light:bg-slate-100">
+                    {{ _self.pref_option('theme', 'light', 'sun', 'Light theme') }}
+                    {{ _self.pref_option('theme', 'dark', 'moon', 'Dark theme') }}
+                    {{ _self.pref_option('theme', 'auto', 'computer-desktop', 'Follow system theme') }}
+                </div>
+            </div>
+            <div class="flex items-center justify-between gap-3">
+                <span class="text-xs text-gray-500 light:text-slate-500">Content width</span>
+                <div role="radiogroup" aria-label="Content width"
+                     class="inline-flex shrink-0 rounded-lg border border-slate-700 bg-slate-800 p-0.5 light:border-slate-200 light:bg-slate-100">
+                    {{ _self.pref_option('width', 'fixed', 'arrows-pointing-in', 'Fixed width') }}
+                    {{ _self.pref_option('width', 'full', 'arrows-pointing-out', 'Fit to window') }}
+                </div>
+            </div>
+            <a href="https://patchlevel.de" target="_blank" rel="noreferrer"
+               class="block truncate rounded text-xs text-gray-500 transition-colors hover:text-gray-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light light:text-slate-500 light:hover:text-slate-800">
+                made by patchlevel
+            </a>
+        </div>
+    </aside>
+
+    <div class="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-slate-800 bg-slate-900 px-4 lg:hidden light:border-slate-200 light:bg-white">
+        <button type="button" data-sidebar-toggle aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar"
+                class="-ml-2 rounded-md p-1.5 text-gray-300 hover:bg-slate-800 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light light:text-slate-600 light:hover:bg-slate-100 light:hover:text-slate-900">
+            {{ heroicon('bars-3', 'h-6 w-6') }}
         </button>
-        <div class="flex-1 text-sm font-semibold leading-6 text-white">Dashboard</div>
-        <a href="#">
-            <span class="sr-only">Your profile</span>
-            <img class="h-8 w-8 rounded-full bg-indigo-700"
-                 src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                 alt="">
-        </a>
+        <img class="h-7 w-7 light:hidden" src="{{ asset('bundles/patchleveleventsourcingdashboard/logo.png') }}" alt="" width="28" height="28">
+        <img class="hidden h-7 w-7 light:block" src="{{ asset('bundles/patchleveleventsourcingdashboard/logo-light.png') }}" alt="" width="28" height="28">
+        <span class="text-sm font-semibold text-white light:text-slate-900">Event Sourcing Dashboard</span>
     </div>
 
-    <main class="py-10 lg:pl-72">
-        <div class="px-4 sm:px-6 lg:px-8">
+    <main class="lg:pl-72">
+        <div class="mx-auto max-w-screen-2xl px-4 py-8 sm:px-6 lg:px-10 wide:max-w-none">
             {% block content %}{% endblock %}
         </div>
     </main>
 {% endblock %}
 
-
-{% macro nav_point(label, icon, path) %}
-    {% set url = path(path) %}
+{% macro nav_point(label, icon, route) %}
+    {% set url = path(route) %}
     {% set active = app.request.pathInfo starts with url %}
     <li>
-        <a href="{{ path(path) }}"
-           class="{{ active ? "bg-indigo-700 text-white" : "text-indigo-200 hover:text-white hover:bg-indigo-700"}} group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
-            {{ heroicon(icon, 'h-6 w-6 shrink-0 text-indigo-200 group-hover:text-white') }}
+        <a href="{{ url }}" {% if active %}aria-current="page"{% endif %}
+           class="{{ active ? 'bg-blue-950 light:bg-blue-50 text-primary-light' : 'text-gray-400 hover:bg-slate-800 hover:text-white light:text-slate-600 light:hover:bg-slate-100 light:hover:text-slate-900' }} group flex items-center gap-x-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light">
+            {{ heroicon(icon, 'h-5 w-5 shrink-0') }}
             {{ label }}
         </a>
     </li>
+{% endmacro %}
+
+{% macro pref_option(pref, value, icon, label) %}
+    <button type="button" role="radio" aria-checked="false" data-pref="{{ pref }}" data-value="{{ value }}" aria-label="{{ label }}" title="{{ label }}"
+            class="rounded-md p-1.5 text-gray-400 transition-colors hover:text-white aria-checked:bg-slate-700 aria-checked:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light light:text-slate-500 light:hover:text-slate-900 light:aria-checked:bg-white light:aria-checked:text-slate-900 light:aria-checked:shadow-sm">
+        {{ heroicon(icon, 'h-4 w-4') }}
+    </button>
 {% endmacro %}

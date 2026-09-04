@@ -1,83 +1,65 @@
-<dl class="divide-y divide-gray-100">
+{% import '@PatchlevelEventSourcingDashboard/components.html.twig' as ui %}
+
+<dl class="divide-y divide-slate-800 light:divide-slate-100">
     {% if eventsourcing_uses_stream_store() %}
-        <div class="p-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0 group/parent">
-            <dt class="text-sm font-medium leading-6 text-gray-900">Stream</dt>
-            <dd class="mt-1 text-sm leading-6 text-gray-500 sm:col-span-2 sm:mt-0">
-                {{ eventsourcing_stream_name(message) }}
-                <a class="group-hover/parent:visible invisible" href="{{ path('patchlevel_event_sourcing_dashboard_inspection_stream', {stream: eventsourcing_stream_name(message)}) }}#{{ eventsourcing_playhead(message) }}">
-                    {{ heroicon('identification', 'h-5 w-5 -mt-1 text-gray-400 inline') }}
-                </a>
+        {% set stream = eventsourcing_stream_name(message) %}
+        <div class="group/parent grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+            <dt class="text-sm font-medium text-gray-400 light:text-slate-500">Stream</dt>
+            <dd class="break-all font-mono text-xs leading-5 text-gray-200 sm:col-span-2 light:text-slate-800">
+                {{ stream }}
+                {{ ui.row_action(path('patchlevel_event_sourcing_dashboard_inspection_stream', { stream: stream }) ~ '#' ~ eventsourcing_playhead(message), 'identification', 'Inspect stream') }}
             </dd>
         </div>
     {% else %}
-        {{ _self.text('Aggregate', eventsourcing_aggregate_name(message)) }}
-        {{ _self.text('Aggregate Class', eventsourcing_aggregate_class(message)) }}
-
-        <div class="p-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0 group/parent">
-            <dt class="text-sm font-medium leading-6 text-gray-900">Aggregate Id</dt>
-            <dd class="mt-1 text-sm leading-6 text-gray-500 sm:col-span-2 sm:mt-0">
-                {{ eventsourcing_aggregate_id(message) }}
-                <a class="group-hover/parent:visible invisible" href="{{ path('patchlevel_event_sourcing_dashboard_inspection_show', {aggregateName: eventsourcing_aggregate_name(message), aggregateId: eventsourcing_aggregate_id(message)}) }}#{{ eventsourcing_playhead(message) }}">
-                    {{ heroicon('identification', 'h-5 w-5 -mt-1 text-gray-400 inline') }}
-                </a>
+        {% set aggregate = eventsourcing_aggregate_name(message) %}
+        {% set aggregateId = eventsourcing_aggregate_id(message) %}
+        {{ ui.dl_row('Aggregate', aggregate) }}
+        {{ ui.dl_row('Aggregate class', eventsourcing_aggregate_class(message), true) }}
+        <div class="group/parent grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+            <dt class="text-sm font-medium text-gray-400 light:text-slate-500">Aggregate ID</dt>
+            <dd class="break-all font-mono text-xs leading-5 text-gray-200 sm:col-span-2 light:text-slate-800">
+                {{ aggregateId }}
+                {{ ui.clipboard(aggregateId) }}
+                {{ ui.row_action(path('patchlevel_event_sourcing_dashboard_inspection_show', { aggregateName: aggregate, aggregateId: aggregateId }) ~ '#' ~ eventsourcing_playhead(message), 'identification', 'Inspect aggregate') }}
             </dd>
         </div>
     {% endif %}
 
-    {{ _self.text('Playhead', eventsourcing_playhead(message)) }}
+    {{ ui.dl_row('Playhead', eventsourcing_playhead(message), true) }}
 
-    <div class="p-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0 group/parent">
-        <dt class="text-sm font-medium leading-6 text-gray-900">Event Name</dt>
-        <dd class="mt-1 text-sm leading-6 text-gray-500 sm:col-span-2 sm:mt-0">
+    {% set eventLink = path('patchlevel_event_sourcing_dashboard_event_index', { name: eventsourcing_event_name(message) }) ~ '#' ~ eventsourcing_event_name(message) %}
+    <div class="group/parent grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+        <dt class="text-sm font-medium text-gray-400 light:text-slate-500">Event name</dt>
+        <dd class="break-all text-sm text-gray-200 sm:col-span-2 light:text-slate-800">
             {{ eventsourcing_event_name(message) }}
-            <a class="group-hover/parent:visible invisible" href="{{ path('patchlevel_event_sourcing_dashboard_event_index', {name: eventsourcing_event_name(message)}) }}#{{ eventsourcing_event_name(message) }}">
-                {{ heroicon('calendar', 'h-5 w-5 -mt-1 text-gray-400 inline') }}
-            </a>
+            {{ ui.row_action(eventLink, 'calendar', 'Show event definition') }}
         </dd>
     </div>
-
-    <div class="p-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0 group/parent">
-        <dt class="text-sm font-medium leading-6 text-gray-900">Event Class</dt>
-        <dd class="mt-1 text-sm leading-6 text-gray-500 sm:col-span-2 sm:mt-0">
+    <div class="group/parent grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+        <dt class="text-sm font-medium text-gray-400 light:text-slate-500">Event class</dt>
+        <dd class="break-all font-mono text-xs leading-5 text-gray-200 sm:col-span-2 light:text-slate-800">
             {{ eventsourcing_event_class(message) }}
-            <a class="group-hover/parent:visible invisible" href="{{ path('patchlevel_event_sourcing_dashboard_event_index', {name: eventsourcing_event_name(message)}) }}#{{ eventsourcing_event_name(message) }}">
-                {{ heroicon('calendar', 'h-5 w-5 -mt-1 text-gray-400 inline') }}
-            </a>
+            {{ ui.row_action(eventLink, 'calendar', 'Show event definition') }}
         </dd>
     </div>
 
-    {{ _self.text('Recorded on', eventsourcing_recorded_on(message)|date('Y-m-d H:i:s')) }}
-    <div class="p-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-        <dt class="text-sm font-medium leading-6 text-gray-900">Profiler Token</dt>
-        <dd class="mt-1 text-sm leading-6 text-gray-500 sm:col-span-2 sm:mt-0">
+    {{ ui.dl_row('Recorded on', eventsourcing_recorded_on(message) ? eventsourcing_recorded_on(message)|date('Y-m-d H:i:s') : null, true) }}
+
+    <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+        <dt class="text-sm font-medium text-gray-400 light:text-slate-500">Profiler token</dt>
+        <dd class="font-mono text-xs leading-5 text-gray-200 sm:col-span-2 light:text-slate-800">
             {% set token = eventsourcing_profiler_token(message) %}
             {% if token %}
-                <a href="{{ path('_profiler', {token: token, panel: 'Patchlevel\\EventSourcingBundle\\DataCollector\\EventSourcingCollector'}) }}" target="_blank">
-                    {{ token }}
+                <a href="{{ path('_profiler', { token: token, panel: 'Patchlevel\\EventSourcingBundle\\DataCollector\\EventSourcingCollector' }) }}" target="_blank" rel="noreferrer"
+                   class="inline-flex items-center gap-1 rounded text-primary-light hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light">
+                    {{ token }} {{ heroicon('arrow-top-right-on-square', 'h-3.5 w-3.5') }}
                 </a>
             {% else %}
-                ~
+                <span class="text-gray-500 light:text-slate-400">~</span>
             {% endif %}
         </dd>
     </div>
-    {{ _self.json('Event Payload', eventsourcing_event_payload(message)) }}
-    {{ _self.json('Message Headers', message.headers|json_encode(constant('JSON_PRETTY_PRINT'))) }}
+
+    {{ ui.dl_json('Event payload', eventsourcing_event_payload(message)) }}
+    {{ ui.dl_json('Message headers', message.headers|json_encode(constant('JSON_PRETTY_PRINT'))) }}
 </dl>
-
-{% macro text(name, content) %}
-    <div class="p-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-        <dt class="text-sm font-medium leading-6 text-gray-900">{{ name }}</dt>
-        <dd class="mt-1 text-sm leading-6 text-gray-500 sm:col-span-2 sm:mt-0">{{ content }}</dd>
-    </div>
-{% endmacro %}
-
-{% macro json(name, content) %}
-    <div class="p-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-        <dt class="text-sm font-medium leading-6 text-gray-900">{{ name }}</dt>
-        <dd class="mt-1 text-sm leading-6 text-gray-500 sm:col-span-2 sm:mt-0">
-            <div class="json">
-                {{~ content ~}}
-            </div>
-        </dd>
-    </div>
-{% endmacro %}

@@ -1,256 +1,155 @@
 {% extends '@PatchlevelEventSourcingDashboard/layout.html.twig' %}
+{% import '@PatchlevelEventSourcingDashboard/components.html.twig' as ui %}
+
+{% block title %}{{ aggregateName }} · Inspection · {% endblock %}
 
 {% block content %}
-    <div class="px-4 sm:px-6 lg:px-8">
+    {% set base = { aggregateId: aggregateId, aggregateName: aggregateName, tab: tab } %}
 
-        <!-- Headline -->
-        <div class="flex text-2xl font-bold mb-8 place-content-between">
-            Inspection
-            {% if until %}
-                <a class="inline-flex items-center gap-x-1.5 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                   title="Stop time travel"
-                   href="{{ path('patchlevel_event_sourcing_dashboard_inspection_show', { aggregateId: aggregateId, aggregateName: aggregateName, tab: tab}) }}">
-                    {{ heroicon('stop', '-ml-0.5 h-5 w-5') }} Stop time travel
-                </a>
-            {% else %}
-            <a class="inline-flex items-center gap-x-1.5 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-               title="Time travel"
-               href="{{ path('patchlevel_event_sourcing_dashboard_inspection_show', { aggregateId: aggregateId, aggregateName: aggregateName, tab: tab, until: 1 }) }}#1">
-                {{ heroicon('clock', '-ml-0.5 h-5 w-5') }} Time travel
-            </a>
-            {% endif %}
+    <div class="flex flex-wrap items-start justify-between gap-4">
+        <div class="min-w-0">
+            {{ ui.title('Inspection') }}
+            <p class="mt-1 flex flex-wrap items-center gap-x-2 text-sm text-gray-400 light:text-slate-500">
+                <span class="font-medium text-gray-200 light:text-slate-700">{{ aggregateName }}</span>
+                <span class="group/parent font-mono text-xs">{{ aggregateId }} {{ ui.clipboard(aggregateId) }}</span>
+            </p>
         </div>
-
-
-        <div class="flex mt-8 gap-4 items-start">
-            <div class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow ring-1 ring-black ring-opacity-5 w-1/2 sticky top-4">
-
-                {% if until %}
-                    <div class="flex bg-indigo-600 p-6 z-10 place-content-between">
-                        <div class="flex text-sm leading-6 text-white items-center gap-1">
-                                {{ heroicon('clock', 'h-4 w-4 inline') }}
-                                <strong class="font-semibold">Time travel:</strong>
-                                <span class="mr-4">
-                                playhead {{ aggregate.playhead }} from {{ count }}
-                            </span>
-                        </div>
-                        <div class="flex gap-2">
-                            {% if aggregate.playhead != 1 %}
-                                <a href="{{ path('patchlevel_event_sourcing_dashboard_inspection_show', { aggregateId: aggregateId, aggregateName: aggregateName, tab: tab, until: until - 1 }) }}#{{ until - 1 }}"
-                                   class="rounded-md bg-white/10 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-white/20">
-                                    {{ heroicon('backward', '-ml-0.5 h-5 w-5') }}
-                                </a>
-                            {% endif %}
-
-                            <a href="{{ path('patchlevel_event_sourcing_dashboard_inspection_show', { aggregateId: aggregateId, aggregateName: aggregateName, tab: tab }) }}"
-                               class="rounded-md bg-white/10 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-white/20">
-                                {{ heroicon('stop', '-ml-0.5 h-5 w-5') }}
-                            </a>
-
-                            {% if aggregate.playhead < count %}
-                                <a href="{{ path('patchlevel_event_sourcing_dashboard_inspection_show', { aggregateId: aggregateId, aggregateName: aggregateName, tab: tab, until: until + 1 }) }}#{{ until + 1 }}"
-                                   class="rounded-md bg-white/10 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-white/20">
-                                    {{ heroicon('forward', '-ml-0.5 h-5 w-5') }}
-                                </a>
-                            {% endif %}
-
-                        </div>
-                    </div>
-                {% endif %}
-
-                <div class="px-4 py-5 sm:p-6">
-                    <div class="mb-8">
-                        <nav class="flex space-x-4" aria-label="Tabs">
-                            {% for key, label in {
-                                'details': 'Details',
-                                'serialized': 'Serialized',
-                                'dump': 'Dump',
-                                'snapshot': 'Snapshot',
-                            } %}
-                                {% if key == tab %}
-                                    <a href="{{ path('patchlevel_event_sourcing_dashboard_inspection_show', { aggregateId: aggregateId, aggregateName: aggregateName, tab: key, until: until }) }}{% if until %}#{{ until }}{% endif %}"
-                                       class="bg-gray-100 text-gray-700 rounded-md px-3 py-2 text-sm font-medium"
-                                       aria-current="page">{{ label }}</a>
-                                {% else %}
-                                    <a href="{{ path('patchlevel_event_sourcing_dashboard_inspection_show', { aggregateId: aggregateId, aggregateName: aggregateName, tab: key, until: until }) }}{% if until %}#{{ until }}{% endif %}"
-                                       class="text-gray-500 hover:text-gray-700 rounded-md px-3 py-2 text-sm font-medium">{{ label }}</a>
-                                {% endif %}
-                            {% endfor %}
-                        </nav>
-                    </div>
-
-                    {% if tab == 'details' %}
-                        <dl class="divide-y divide-gray-100">
-                            {{ _self.text('ID', aggregateId) }}
-                            {{ _self.text('Name', aggregateName) }}
-                            {{ _self.text('Class', aggregateClass) }}
-                            {{ _self.text('Playhead', aggregate.playhead) }}
-
-                            {% if metadata.snapshot %}
-                                {{ _self.text('Snapshot Adapter', metadata.snapshot.store) }}
-                                {{ _self.text('Snapshot Version', metadata.snapshot.version) }}
-                                {{ _self.text('Snapshot Batch', metadata.snapshot.batch) }}
-                            {% endif %}
-
-                        </dl>
-                    {% endif %}
-
-                    {% if tab == 'dump' %}
-                        {{ eventsourcing_dump(aggregate) }}
-                    {% endif %}
-
-                    {% if tab == 'serialized' %}
-                        {% if serializedError %}
-                            <div class="rounded-md bg-red-50 p-4">
-                                <div class="flex">
-                                    <div class="flex-shrink-0">
-                                        <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor"
-                                             aria-hidden="true">
-                                            <path fill-rule="evenodd"
-                                                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
-                                                  clip-rule="evenodd" />
-                                        </svg>
-                                    </div>
-                                    <div class="ml-3">
-                                        <h3 class="text-sm font-medium text-red-800">{{ serializedError }}</h3>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-
-                        {% if serializedAggregate %}
-                            <div class="json text-sm bg-gray-50 px-4 rounded">
-                                {{~ serializedAggregate ~}}
-                            </div>
-                        {% endif %}
-                    {% endif %}
-
-
-                    {% if tab == 'snapshot' %}
-                        {% if snapshotError %}
-                            <div class="rounded-md bg-red-50 p-4">
-                                <div class="flex">
-                                    <div class="flex-shrink-0">
-                                        <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor"
-                                             aria-hidden="true">
-                                            <path fill-rule="evenodd"
-                                                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
-                                                  clip-rule="evenodd" />
-                                        </svg>
-                                    </div>
-                                    <div class="ml-3">
-                                        <h3 class="text-sm font-medium text-red-800">{{ snapshotError }}</h3>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-
-                        {% if snapshot %}
-                            {{ eventsourcing_dump(snapshot) }}
-                        {% endif %}
-                    {% endif %}
-                </div>
-            </div>
-
-
-            <div class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow ring-1 ring-black ring-opacity-5 w-1/2">
-                <div class="px-4 py-5 sm:p-6">
-                    <div class="flow-root">
-                        <ul role="list" class="-mb-8">
-                            {% for message in messages %}
-                                <li class="group/message relative {% if until and loop.index > until %}saturate-0{% endif %}">
-                                    <span id="{{ loop.index }}" class="absolute -top-48"></span>
-                                    <div id="marker-{{ loop.index }}" class="absolute -left-10 z-20 invisible">
-                                        {{ heroicon('arrow-long-right', 'h-8 w-8 text-gray-500') }}
-                                    </div>
-                                    <div class="relative pb-8">
-                                        {% if loop.index != count %}
-                                            <span class="absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200"
-                                                  aria-hidden="true"></span>
-                                        {% endif %}
-                                        <div class="relative flex space-x-3">
-                                            <div>
-                                <span {% if eventsourcing_inspection_color(message.event) %}style="background: {{ eventsourcing_inspection_color(message.event) }};"{% endif %}
-                                      class="circle h-8 w-8 rounded-full bg-gray-400 flex items-center justify-center ring-8 ring-white">
-                                    {{ heroicon(eventsourcing_inspection_icon(message.event, 'calendar'), 'h-5 w-5 text-white') }}
-                                </span>
-                                            </div>
-                                            <div class="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
-                                                <div>
-                                                    <p class="text-sm text-gray-500">
-                                                        {{ eventsourcing_inspection_description(message.event, eventsourcing_event_name(message)) }}
-                                                        <button
-                                                                class="text-gray-500 hover:text-gray-900 invisible group-hover/message:visible"
-                                                                data-modal="modal-{{ loop.index }}">
-                                                            {{ heroicon('magnifying-glass', 'h-5 w-5 inline') }}
-                                                        </button>
-                                                        <a href="{{ path('patchlevel_event_sourcing_dashboard_inspection_show', { aggregateId: aggregateId, aggregateName: aggregateName, tab: tab, until: eventsourcing_playhead(message) }) }}#{{ eventsourcing_playhead(message) }}"
-                                                           class="text-gray-500 hover:text-gray-900 invisible group-hover/message:visible"
-                                                        >
-                                                            {{ heroicon('play-pause', 'h-5 w-5 inline') }}
-                                                        </a>
-                                                    </p>
-                                                    <dialog id="modal-{{ loop.index }}"
-                                                            class="relative text-left rounded p-8 w-3/4">
-                                                        <form method="dialog" class="text-right static right-0">
-                                                            <button>
-                                                                {{ heroicon('x-mark', 'h-5 w-5') }}
-                                                            </button>
-                                                        </form>
-
-                                                        {{ include('@PatchlevelEventSourcingDashboard/store/detail.html.twig', {
-                                                            message: message,
-                                                        }) }}
-                                                    </dialog>
-                                                </div>
-                                                <div class="whitespace-nowrap text-right text-xs text-gray-500">
-                                                    {{ eventsourcing_recorded_on(message) ? eventsourcing_recorded_on(message)|date('Y-m-d H:i:s') : '-' }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-
-                </div>
-            </div>
-
-
-        </div>
+        {% if until %}
+            {{ ui.link_secondary(path('patchlevel_event_sourcing_dashboard_inspection_show', base), 'Stop time travel', 'stop', 'Back to the current state') }}
+        {% else %}
+            {{ ui.link_primary(path('patchlevel_event_sourcing_dashboard_inspection_show', base|merge({ until: 1 })) ~ '#1', 'Time travel', 'clock', 'Replay the aggregate event by event') }}
+        {% endif %}
     </div>
 
-    <script>
-      document.querySelectorAll("[data-modal]").forEach(function(button) {
-        button.addEventListener("click", function() {
-          var dialog = document.getElementById(button.dataset.modal);
-          dialog.showModal();
-          dialog.querySelector("button").addEventListener("click", function() {
-            dialog.close();
-          });
-        });
-      });
+    <div class="mt-8 grid items-start gap-6 lg:grid-cols-2">
+        <div class="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900 lg:sticky lg:top-6 light:border-slate-200 light:bg-white light:shadow-sm">
+            {% if until %}
+                {# The one loud surface on the page: the brand gradient says "you are not looking at now". #}
+                <div class="flex flex-wrap items-center justify-between gap-3 bg-gradient-to-r from-secondary to-primary px-5 py-3 text-white">
+                    <div class="flex items-center gap-2 text-sm">
+                        {{ heroicon('clock', 'h-4 w-4') }}
+                        <span class="font-semibold">Time travel</span>
+                        <span class="font-mono text-xs tabular-nums text-blue-100">playhead {{ aggregate.playhead }} of {{ count }}</span>
+                    </div>
+                    <div class="flex gap-1.5">
+                        {{ _self.travel(aggregate.playhead != 1 ? path('patchlevel_event_sourcing_dashboard_inspection_show', base|merge({ until: until - 1 })) ~ '#' ~ (until - 1) : null, 'backward', 'One event back') }}
+                        {{ _self.travel(path('patchlevel_event_sourcing_dashboard_inspection_show', base), 'stop', 'Stop time travel') }}
+                        {{ _self.travel(aggregate.playhead < count ? path('patchlevel_event_sourcing_dashboard_inspection_show', base|merge({ until: until + 1 })) ~ '#' ~ (until + 1) : null, 'forward', 'One event forward') }}
+                    </div>
+                </div>
+            {% endif %}
 
-      if (window.location.hash) {
-        const item = document.getElementById(window.location.hash.replace('#', 'marker-'));
-        item.classList.add('visible');
-        item.classList.remove('invisible');
-      }
-    </script>
+            <nav class="flex gap-1 border-b border-slate-800 px-3 light:border-slate-200" aria-label="Aggregate views">
+                {% for key, label in { details: 'Details', serialized: 'Serialized', dump: 'Dump', snapshot: 'Snapshot' } %}
+                    <a href="{{ path('patchlevel_event_sourcing_dashboard_inspection_show', base|merge({ tab: key, until: until })) }}{% if until %}#{{ until }}{% endif %}"
+                       {% if key == tab %}aria-current="page"{% endif %}
+                       class="{{ key == tab ? 'border-primary-light text-white light:text-slate-900' : 'border-transparent text-gray-400 hover:border-slate-600 hover:text-white light:text-slate-500 light:hover:border-slate-300 light:hover:text-slate-900' }} -mb-px border-b-2 px-3 py-3 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary-light">
+                        {{ label }}
+                    </a>
+                {% endfor %}
+            </nav>
 
+            <div class="p-5">
+                {% if tab == 'details' %}
+                    <dl class="divide-y divide-slate-800 light:divide-slate-100">
+                        {{ ui.dl_row('ID', aggregateId, true) }}
+                        {{ ui.dl_row('Name', aggregateName) }}
+                        {{ ui.dl_row('Class', aggregateClass, true) }}
+                        {{ ui.dl_row('Playhead', aggregate.playhead, true) }}
+                        {% if metadata.snapshot %}
+                            {{ ui.dl_row('Snapshot adapter', metadata.snapshot.store) }}
+                            {{ ui.dl_row('Snapshot version', metadata.snapshot.version, true) }}
+                            {{ ui.dl_row('Snapshot batch', metadata.snapshot.batch, true) }}
+                        {% endif %}
+                    </dl>
+                {% elseif tab == 'dump' %}
+                    {{ eventsourcing_dump(aggregate) }}
+                {% elseif tab == 'serialized' %}
+                    {% if serializedError %}
+                        {{ ui.error(serializedError) }}
+                    {% endif %}
+                    {% if serializedAggregate %}
+                        <div class="json">
+                            {{- serializedAggregate -}}
+                        </div>
+                    {% endif %}
+                {% elseif tab == 'snapshot' %}
+                    {% if snapshotError %}
+                        {{ ui.error(snapshotError) }}
+                    {% endif %}
+                    {% if snapshot %}
+                        {{ eventsourcing_dump(snapshot) }}
+                    {% elseif not snapshotError %}
+                        {{ ui.empty('document-magnifying-glass', 'No snapshot stored', 'This aggregate is rebuilt from its events every time.') }}
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5 light:border-slate-200 light:bg-white light:shadow-sm">
+            <h2 class="mb-5 text-sm font-semibold text-white light:text-slate-900">
+                Event history <span class="ml-1 font-mono text-xs font-normal tabular-nums text-gray-500">{{ count }}</span>
+            </h2>
+
+            <ol role="list" class="relative">
+                {% for message in messages %}
+                    {% set playhead = eventsourcing_playhead(message) %}
+                    {% set color = eventsourcing_inspection_color(message.event) %}
+                    {% set future = until and loop.index > until %}
+                    {% set dialog = 'message-' ~ loop.index %}
+                    <li class="group/message relative flex gap-4 pb-6 {{ future ? 'opacity-40 saturate-0' }} {{ loop.index == count ? 'pb-0' }}">
+                        <span id="{{ loop.index }}" class="absolute -top-24" aria-hidden="true"></span>
+                        <span id="marker-{{ loop.index }}" class="invisible absolute -left-9 top-1 text-primary-light" aria-hidden="true">
+                            {{ heroicon('arrow-long-right', 'h-6 w-6') }}
+                        </span>
+
+                        {% if loop.index != count %}
+                            <span class="absolute left-4 top-8 -ml-px h-full w-0.5 bg-slate-800 light:bg-slate-200" aria-hidden="true"></span>
+                        {% endif %}
+
+                        <span class="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-600 text-white light:bg-slate-400" {% if color %}style="background: {{ color }};"{% endif %} aria-hidden="true">
+                            {{ heroicon(eventsourcing_inspection_icon(message.event, 'calendar'), 'h-4 w-4') }}
+                        </span>
+
+                        <div class="flex min-w-0 flex-1 flex-col gap-1 pt-1.5 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                            <div class="min-w-0 break-words text-sm text-gray-200 light:text-slate-700">
+                                {{ eventsourcing_inspection_description(message.event, eventsourcing_event_name(message)) }}
+                                <span class="ml-1 inline-flex gap-0.5 align-middle opacity-0 transition-opacity focus-within:opacity-100 group-hover/message:opacity-100">
+                                    <button type="button" data-modal="{{ dialog }}" title="Show message details" aria-label="Show message details"
+                                            class="rounded p-0.5 text-gray-500 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light light:hover:text-slate-900">
+                                        {{ heroicon('magnifying-glass', 'h-4 w-4') }}
+                                    </button>
+                                    <a href="{{ path('patchlevel_event_sourcing_dashboard_inspection_show', base|merge({ until: playhead })) }}#{{ playhead }}" title="Travel to this event" aria-label="Travel to this event"
+                                       class="rounded p-0.5 text-gray-500 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light light:hover:text-slate-900">
+                                        {{ heroicon('play-pause', 'h-4 w-4') }}
+                                    </a>
+                                </span>
+
+                                {% embed '@PatchlevelEventSourcingDashboard/dialog.html.twig' with { id: dialog, title: eventsourcing_event_name(message), message: message } %}
+                                    {% block content %}
+                                        {{ include('@PatchlevelEventSourcingDashboard/store/detail.html.twig', { message: message }) }}
+                                    {% endblock %}
+                                {% endembed %}
+                            </div>
+                            <div class="flex shrink-0 gap-2 font-mono text-xs tabular-nums text-gray-500 sm:flex-col sm:items-end sm:gap-0">
+                                <span>{{ eventsourcing_recorded_on(message) ? eventsourcing_recorded_on(message)|date('Y-m-d H:i:s') : '-' }}</span>
+                                <span class="text-gray-600 light:text-slate-400">#{{ playhead }}</span>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ol>
+        </div>
+    </div>
 {% endblock %}
 
-{% macro text(name, content) %}
-    <div class="p-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-        <dt class="text-sm font-medium leading-6 text-gray-900">{{ name }}</dt>
-        <dd class="mt-1 text-sm leading-6 text-gray-500 sm:col-span-2 sm:mt-0">
-            {% if content == null %}
-                ~
-            {% else %}
-                {{ content }}
-            {% endif %}
-        </dd>
-    </div>
+{% macro travel(url, icon, label) %}
+    {% if url %}
+        <a href="{{ url }}" title="{{ label }}" aria-label="{{ label }}"
+           class="rounded-md bg-white p-1.5 text-primary transition-colors hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+            {{ heroicon(icon, 'h-4 w-4') }}
+        </a>
+    {% else %}
+        <span class="rounded-md p-1.5 text-blue-200" aria-hidden="true">{{ heroicon(icon, 'h-4 w-4') }}</span>
+    {% endif %}
 {% endmacro %}
-

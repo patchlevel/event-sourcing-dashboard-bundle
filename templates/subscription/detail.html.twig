@@ -1,88 +1,54 @@
-<dl class="divide-y divide-gray-100">
-    {{ _self.text('ID', subscription.id) }}
-    {{ _self.text('Group', subscription.group) }}
-    {{ _self.text('Run mode', subscription.runMode.value|replace({'_': ' '})) }}
-    {# { _self.text('Class', 'unknown') } #}
-    {{ _self.text('Position', subscription.position) }}
-    {{ _self.text('Status', subscription.status.value) }}
+{% import '@PatchlevelEventSourcingDashboard/components.html.twig' as ui %}
 
-    {{ _self.text('Retry attempt', subscription.retryAttempt) }}
-
-    {{ _self.text('Updated at', subscription.lastSavedAt|date('Y-m-d H:i:s')) }}
-
-    {% if subscription.subscriptionError %}
-        {% if subscription.subscriptionError.errorContext %}
-            {% for context in subscription.subscriptionError.errorContext %}
-                <div class="rounded-md bg-gray-50 overflow-hidden">
-                    <div class="flex bg-red-600 p-4">
-                        <div class="flex-shrink-0">
-                            {{ heroicon('exclamation-circle', class='h-5 w-5 text-white') }}
-                        </div>
-                        <div class="ml-3">
-                            <h3 class="text-sm font-medium text-white">{{ context.message }}</h3>
-                        </div>
-                    </div>
-
-                    <div class="rounded-md bg-gray-50 p-4">
-                        {% for step in context.trace %}
-                            <div class="py-2">
-                                {% if step.class is defined %}
-                                    <div class="text-gray-900 cursor-help" title="{{ step.class }}">
-                                        {{~ step.class|split('\\')|last ~}}{{~ step.type ~}}{{~ step.function -}}
-                                        <span title="{{ _self.args(step.args)|escape('html_attr') }}">({% if step.args|length > 0 %}...{% endif %})</span>
-                                    </div>
-                                {% else %}
-                                    <div class="text-gray-900">
-                                        <span class="cursor-help" title="{{ step.function }}">
-                                            {{ step.function -}}
-                                            <span title="{{ _self.args(step.args)|escape('html_attr') }}">({% if step.args|length > 0 %}...{% endif %})</span>
-                                        </span>
-                                    </div>
-                                {% endif %}
-                                {% if step.file is defined %}
-                                    <div class="text-xs text-gray-500">in {{ step.file }} (line {{ step.line }})</div>
-                                {% endif %}
-                            </div>
-                        {% endfor %}
-
-                    </div>
-                </div>
-
-
-            {% endfor %}
-        {% else %}
-            <div class="rounded-md bg-red-50 p-4">
-                <div class="flex">
-                    <div class="flex-shrink-0">
-                        {{ heroicon('exclamation-circle', class='h-5 w-5 text-red-800') }}
-                    </div>
-                    <div class="ml-3">
-                        <h3 class="text-sm font-medium text-red-800">{{ subscription.subscriptionError.errorMessage }}</h3>
-                    </div>
-                </div>
-            </div>
-        {% endif %}
-    {% endif %}
-
+<dl class="divide-y divide-slate-800 light:divide-slate-100">
+    {{ ui.dl_row('ID', subscription.id) }}
+    {{ ui.dl_row('Group', subscription.group) }}
+    {{ ui.dl_row('Run mode', subscription.runMode.value|replace({'_': ' '})) }}
+    {{ ui.dl_row('Position', subscription.position, true) }}
+    <div class="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+        <dt class="text-sm font-medium text-gray-400 light:text-slate-500">Status</dt>
+        <dd class="sm:col-span-2">{{ ui.status_badge(subscription.status.value) }}</dd>
+    </div>
+    {{ ui.dl_row('Retry attempt', subscription.retryAttempt, true) }}
+    {{ ui.dl_row('Updated at', subscription.lastSavedAt|date('Y-m-d H:i:s'), true) }}
 </dl>
 
-{% macro text(name, content) %}
-    <div class="p-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-        <dt class="text-sm font-medium leading-6 text-gray-900">{{ name }}</dt>
-        <dd class="mt-1 text-sm leading-6 text-gray-500 sm:col-span-2 sm:mt-0">{{ content }}</dd>
-    </div>
-{% endmacro %}
+{% if subscription.subscriptionError %}
+    <div class="space-y-4 py-3">
+        {% if subscription.subscriptionError.errorContext %}
+            {% for context in subscription.subscriptionError.errorContext %}
+                <div class="overflow-hidden rounded-xl border border-red-900 light:border-red-200">
+                    <div class="flex gap-3 bg-red-950 px-4 py-3 text-sm text-red-300 light:bg-red-50 light:text-red-800">
+                        {{ heroicon('exclamation-circle', 'h-5 w-5 shrink-0') }}
+                        <p class="min-w-0 break-words font-medium">{{ context.message }}</p>
+                    </div>
 
-{% macro json(name, content) %}
-    <div class="p-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-        <dt class="text-sm font-medium leading-6 text-gray-900">{{ name }}</dt>
-        <dd class="mt-1 text-sm leading-6 text-gray-500 sm:col-span-2 sm:mt-0">
-            <div class="json">
-                {{~ content ~}}
-            </div>
-        </dd>
+                    {% if context.trace %}
+                    <ol class="code-window divide-y divide-slate-800 rounded-none border-0 border-t border-slate-800 light:divide-slate-800 light:border-slate-800">
+                        {% for step in context.trace %}
+                            <li class="px-4 py-2 font-mono text-xs leading-5">
+                                {% if step.class is defined %}
+                                    <span class="text-gray-200" title="{{ step.class }}">
+                                        <span class="text-gray-500">{{ step.class|split('\\')|slice(0, -1)|join('\\') }}\</span>{{ step.class|split('\\')|last }}{{ step.type }}<span class="text-tertiary-light light:text-[#15d3f1]">{{ step.function }}</span>
+                                    </span>
+                                {% else %}
+                                    <span class="text-tertiary-light light:text-[#15d3f1]" title="{{ step.function }}">{{ step.function }}</span>
+                                {% endif %}
+                                <span class="text-gray-500" title="{{ _self.args(step.args)|escape('html_attr') }}">({% if step.args|length > 0 %}…{% endif %})</span>
+                                {% if step.file is defined %}
+                                    <div class="text-gray-500">{{ step.file }}:{{ step.line }}</div>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ol>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            {{ ui.error(subscription.subscriptionError.errorMessage) }}
+        {% endif %}
     </div>
-{% endmacro %}
+{% endif %}
 
 {% macro args(args) -%}
     {% for arg in args %}{{ _self.arg(arg) }}{% if not loop.last %}, {% endif %}{{ "\n" }}{% endfor %}

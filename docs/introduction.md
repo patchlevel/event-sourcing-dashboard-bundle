@@ -17,6 +17,7 @@ production once it is placed behind proper authentication.
 * List all registered [events](events.md) together with their listeners and subscribers
 * View and control [subscriptions](subscriptions.md): boot, run, pause, reactivate, rebuild or remove
 * [Customize](events.md) how events are rendered with the `#[Inspect]` attribute
+* Light and dark mode and a fixed or full content width, chosen in the sidebar
 
 ## Installation
 

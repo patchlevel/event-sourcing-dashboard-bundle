@@ -1,3 +1,141 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    @font-face {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 100 900;
+        font-display: swap;
+        src: url('../fonts/InterVariable.woff2') format('woff2');
+    }
+
+    @font-face {
+        font-family: 'JetBrains Mono';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url('../fonts/JetBrainsMono-Regular.woff2') format('woff2');
+    }
+
+    /* Accent shades as RGB triples so Tailwind opacity modifiers keep working
+       (see tailwind.config.js). Dark values first, light remaps below. */
+    :root {
+        --color-primary-light: 52 130 239;
+        --color-secondary-light: 130 103 243;
+        --color-tertiary-light: 21 211 241;
+        color-scheme: dark;
+    }
+
+    :root[data-theme="light"] {
+        --color-primary-light: 17 102 221;
+        --color-secondary-light: 99 65 240;
+        --color-tertiary-light: 14 116 144;
+        color-scheme: light;
+    }
+
+    html {
+        @apply h-full bg-slate-950 text-gray-300 antialiased;
+        /* Always reserve the scrollbar's space, otherwise the centered content
+           shifts sideways between short pages and pages that scroll. */
+        scrollbar-gutter: stable;
+    }
+
+    html[data-theme="light"] {
+        @apply bg-slate-50 text-slate-600;
+    }
+
+    body {
+        @apply h-full font-sans;
+    }
+
+    /* Code ligatures would turn `->` into an arrow glyph; readers copy what
+       they see, so they stay off. */
+    :where(pre, code, kbd, samp, .font-mono) {
+        font-variant-ligatures: none;
+        font-feature-settings: "liga" 0, "calt" 0;
+    }
+
+    ::selection {
+        background-color: #1e3a8a; /* blue-900 */
+    }
+
+    :root[data-theme="light"] ::selection {
+        background-color: #bfdbfe; /* blue-200 */
+    }
+
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: #334155 transparent; /* slate-700 */
+    }
+
+    :root[data-theme="light"] * {
+        scrollbar-color: #cbd5e1 transparent; /* slate-300 */
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+        }
+    }
+}
+
+@layer components {
+    /* Code and data windows stay dark in both themes, like the code samples on
+       patchlevel.dev: the dump is a terminal, not a document. */
+    .code-window {
+        @apply rounded-xl border border-slate-800 bg-slate-950 text-gray-300 light:border-slate-800 light:bg-slate-900;
+    }
+
+    .json {
+        @apply code-window overflow-x-auto px-4 py-3 font-mono text-xs leading-relaxed whitespace-pre;
+    }
+
+    .json_key, .json_key span {
+        @apply text-tertiary-light light:text-[#15d3f1];
+    }
+
+    .json_string, .json_string span {
+        @apply text-green-400;
+    }
+
+    .json_number {
+        @apply text-primary-light light:text-[#3482ef];
+    }
+
+    .json_bool {
+        @apply text-amber-300;
+    }
+}
+
+/* Plain CSS, outside @layer: these selectors never appear in the templates, so a
+   layered rule would be purged as unused. */
+dialog[open] {
+    animation: dialog-in 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+dialog::backdrop {
+    background: rgb(2 6 23 / 0.7);
+    backdrop-filter: blur(4px);
+}
+
+:root[data-theme="light"] dialog::backdrop {
+    background: rgb(15 23 42 / 0.4);
+}
+
+@keyframes dialog-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
