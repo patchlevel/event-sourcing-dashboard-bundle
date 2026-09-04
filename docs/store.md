@@ -1,8 +1,8 @@
 # Store
 
-The store view is the landing page of the dashboard. It lists the messages in your event store in
-reverse order, newest first, so you can see what your application recorded most recently. The index
-route of the bundle redirects here.
+The store view lists the messages in your event store in reverse order, newest first, so you can
+see what your application recorded most recently. It is reachable from the sidebar and from the
+[dashboard](dashboard.md) overview.
 
 ![The store view](screenshot1.png)
 

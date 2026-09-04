@@ -2,9 +2,9 @@ patchlevel_event_sourcing_dashboard_default_index:
   path: /
   controller: Patchlevel\EventSourcingDashboardBundle\Controller\DefaultController::indexAction
 
-patchlevel_event_sourcing_dashboard_default_dashboard:
+patchlevel_event_sourcing_dashboard_dashboard_index:
   path: /dashboard
-  controller: Patchlevel\EventSourcingDashboardBundle\Controller\DefaultController::dashboardAction
+  controller: Patchlevel\EventSourcingDashboardBundle\Controller\DashboardController::indexAction
 
 patchlevel_event_sourcing_dashboard_store_show:
   path: /store
