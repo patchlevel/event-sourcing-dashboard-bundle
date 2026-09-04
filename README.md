@@ -52,6 +52,6 @@ composer require --dev patchlevel/event-sourcing-dashboard-bundle
 ## Contributing
 
 We are open to contributions as long as they are in line with
-our [BC-Policy](https://patchlevel.dev/our-backward-compatibility-promise).
+our [BC-Policy](https://patchlevel.dev/backward-compatibility-promise).
 
 Also note that the `composer.lock` is always generated with the newest supported PHP version as this is the version our tools run in the CI.
