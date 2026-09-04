@@ -27,7 +27,7 @@ Encore
    * Each entry will result in one JavaScript file (e.g. app.js)
    * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
    */
-  .addEntry('app', './assets/app.css')
+  .addEntry('app', './assets/app.js')
 
   // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
   //.enableStimulusBridge('./assets/controllers.json')
@@ -49,14 +49,18 @@ Encore
   //.enableVersioning(Encore.isProduction())
 
   .enablePostCssLoader()
+  // Fonts are shipped in public/fonts and referenced relative to the built
+  // stylesheet; leave url() untouched instead of copying them into build/.
+  .configureCssLoader((options) => {
+    options.url = false;
+  })
   .configureBabel((config) => {
     config.plugins.push('@babel/plugin-transform-class-properties');
   })
 
   // enables @babel/preset-env polyfills
   .configureBabelPresetEnv((config) => {
-    config.useBuiltIns = 'usage';
-    config.corejs = 3;
+    config.useBuiltIns = false;
   })
 
 // enables Sass/SCSS support

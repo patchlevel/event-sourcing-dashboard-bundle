@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-gray-50">
+<html lang="en" data-theme="dark" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>EventSourcing Dashboard</title>
+    <title>{% block title %}{% endblock %}Event Sourcing Dashboard</title>
+    {# Runs before paint so the page never flashes the wrong theme or width. Stored preferences win, otherwise the OS decides the theme. #}
+    <script>(function(){try{var d=document.documentElement;var t=localStorage.getItem('patchlevel-dashboard-theme');var l=t==='light'||(t!=='dark'&&window.matchMedia('(prefers-color-scheme: light)').matches);d.setAttribute('data-theme',l?'light':'dark');if(localStorage.getItem('patchlevel-dashboard-width')==='full'){d.setAttribute('data-width','full');}}catch(e){}})();</script>
+    <link rel="preload" href="{{ asset('bundles/patchleveleventsourcingdashboard/fonts/InterVariable.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="{{ asset('bundles/patchleveleventsourcingdashboard/build/app.css') }}" />
-    <link rel="stylesheet" href="{{ asset('bundles/patchleveleventsourcingdashboard/hightlight.css') }}" />
+    <script src="{{ asset('bundles/patchleveleventsourcingdashboard/build/app.js') }}" defer></script>
     <link rel="icon" type="image/png" sizes="48x48" href="{{ asset('bundles/patchleveleventsourcingdashboard/favicon-48x48.png') }}" />
     <link rel="icon" type="image/png" sizes="72x72" href="{{ asset('bundles/patchleveleventsourcingdashboard/favicon-72x72.png') }}" />
     <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('bundles/patchleveleventsourcingdashboard/favicon-96x96.png') }}" />
@@ -19,6 +21,5 @@
 </head>
 <body class="h-full">
 {% block body %}{% endblock %}
-<script src="{{ asset('bundles/patchleveleventsourcingdashboard/hightlight.js') }}"></script>
 </body>
 </html>

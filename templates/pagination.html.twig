@@ -1,36 +1,33 @@
 {% set total = count == 0 ? 1 : (count / limit)|round(0, 'ceil') %}
 {% set between = 2 %}
+{% set route = app.request.attributes.get('_route') %}
+{% set query = app.request.query.all %}
+{% set link = 'inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light' %}
+{% set idle = 'text-gray-400 hover:bg-slate-800 hover:text-white light:text-slate-600 light:hover:bg-slate-100 light:hover:text-slate-900' %}
+{% set disabled = 'pointer-events-none text-gray-600 light:text-slate-300' %}
 
-<nav class="flex items-center justify-between border-t border-gray-200 px-4 sm:px-0">
-    <div class="-mt-px flex w-0 flex-1">
-        <a href="{{ path(app.request.attributes.get('_route'), app.request.query|merge({'page': page - 1})) }}" class="inline-flex items-center border-t-2 border-transparent p-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
-            <svg class="mr-3 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd" d="M18 10a.75.75 0 01-.75.75H4.66l2.1 1.95a.75.75 0 11-1.02 1.1l-3.5-3.25a.75.75 0 010-1.1l3.5-3.25a.75.75 0 111.02 1.1l-2.1 1.95h12.59A.75.75 0 0118 10z" clip-rule="evenodd" />
-            </svg>
-            Previous
-        </a>
-    </div>
-    <div class="hidden md:-mt-px md:flex">
+<nav class="flex items-center justify-between gap-4 border-t border-slate-800 px-4 py-3 light:border-slate-200" aria-label="Pagination">
+    <a href="{{ path(route, query|merge({ page: page - 1 })) }}"
+       class="{{ link }} {{ page <= 1 ? disabled : idle }}" {% if page <= 1 %}aria-disabled="true" tabindex="-1"{% endif %}>
+        {{ heroicon('chevron-left', 'h-4 w-4') }} Previous
+    </a>
+
+    <div class="hidden items-center gap-1 md:flex">
         {% for p in 1..total %}
             {% if loop.first or loop.last or (p >= page - between and p <= page + between) %}
-                <a
-                        href="{{ path(app.request.attributes.get('_route'), app.request.query|merge({'page': p})) }}"
-                        class="{% if p == page %}border-indigo-500 text-indigo-600{% else %}border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300{% endif %} inline-flex items-center border-t-2 p-4 text-sm font-medium"
-                >{{ p }}</a>
+                <a href="{{ path(route, query|merge({ page: p })) }}" {% if p == page %}aria-current="page"{% endif %}
+                   class="{{ link }} font-mono tabular-nums {{ p == page ? 'bg-blue-950 light:bg-blue-50 text-primary-light' : idle }}">{{ p }}</a>
             {% endif %}
 
             {% if (p == 2 and page - between > 2) or (p == total - 1 and page + between < total - 1) %}
-                <span class="inline-flex items-center border-t-2 border-transparent p-4 text-sm font-medium text-gray-500">...</span>
+                <span class="px-1 text-sm text-gray-500" aria-hidden="true">…</span>
             {% endif %}
         {% endfor %}
     </div>
+    <div class="font-mono text-xs tabular-nums text-gray-500 md:hidden">{{ page }} / {{ total }}</div>
 
-    <div class="-mt-px flex w-0 flex-1 justify-end">
-        <a href="{{ path(app.request.attributes.get('_route'), app.request.query|merge({'page': page + 1})) }}" class="inline-flex items-center border-t-2 border-transparent p-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
-            Next
-            <svg class="ml-3 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd" d="M2 10a.75.75 0 01.75-.75h12.59l-2.1-1.95a.75.75 0 111.02-1.1l3.5 3.25a.75.75 0 010 1.1l-3.5 3.25a.75.75 0 11-1.02-1.1l2.1-1.95H2.75A.75.75 0 012 10z" clip-rule="evenodd" />
-            </svg>
-        </a>
-    </div>
+    <a href="{{ path(route, query|merge({ page: page + 1 })) }}"
+       class="{{ link }} {{ page >= total ? disabled : idle }}" {% if page >= total %}aria-disabled="true" tabindex="-1"{% endif %}>
+        Next {{ heroicon('chevron-right', 'h-4 w-4') }}
+    </a>
 </nav>

@@ -1,0 +1,13 @@
+{# Native <dialog>, opened by a [data-modal="id"] trigger. Use with embed and fill the content block. #}
+<dialog id="{{ id }}" aria-labelledby="{{ id }}-title"
+        class="w-[min(64rem,calc(100vw-2rem))] max-h-[85vh] overflow-hidden whitespace-normal rounded-2xl border border-slate-800 bg-slate-900 p-0 text-left text-gray-300 shadow-2xl light:border-slate-200 light:bg-white light:text-slate-600">
+    <div class="flex items-center justify-between gap-4 border-b border-slate-800 px-6 py-4 light:border-slate-200">
+        <h2 id="{{ id }}-title" class="truncate text-base font-semibold text-white light:text-slate-900">{{ title }}</h2>
+        <button type="button" data-modal-close aria-label="Close" class="-mr-2 rounded-md p-1.5 text-gray-400 transition-colors hover:bg-slate-800 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light light:text-slate-500 light:hover:bg-slate-100 light:hover:text-slate-900">
+            {{ heroicon('x-mark', 'h-5 w-5') }}
+        </button>
+    </div>
+    <div class="max-h-[calc(85vh-3.75rem)] overflow-y-auto px-6 py-3">
+        {% block content %}{% endblock %}
+    </div>
+</dialog>

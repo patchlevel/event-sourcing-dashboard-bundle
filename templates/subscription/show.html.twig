@@ -1,234 +1,117 @@
 {% extends '@PatchlevelEventSourcingDashboard/layout.html.twig' %}
+{% import '@PatchlevelEventSourcingDashboard/components.html.twig' as ui %}
+
+{% block title %}Subscriptions · {% endblock %}
 
 {% block content %}
-    <div class="px-4 sm:px-6 lg:px-8">
+    {% set query = app.request.query %}
+    {% set filtered = query.get('search') or query.get('group') or query.get('mode') or query.get('status') %}
+    {% set modeLabels = {} %}
+    {% for mode in modes|default([]) %}
+        {% set modeLabels = modeLabels|merge({ (mode): mode|replace({'_': ' '}) }) %}
+    {% endfor %}
 
-        <!-- Headline -->
-        <div class="text-2xl font-bold mb-8">
-            Subscriptions
+    {{ ui.title('Subscriptions') }}
+    {{ ui.subtitle(subscriptions|length ~ ' ' ~ (subscriptions|length == 1 ? 'subscription' : 'subscriptions') ~ (filtered ? ' match the filter' : ' registered') ~ ', ' ~ messageCount ~ ' events in the store') }}
+
+    <form class="mt-6 flex flex-wrap items-end gap-3" action="{{ path('patchlevel_event_sourcing_dashboard_subscription_show') }}">
+        <div class="w-full sm:w-52">
+            {{ ui.label('search', 'Search') }}
+            {{ ui.input('search', query.get('search'), 'Subscription ID') }}
         </div>
-
-        <div class="">
-            <form class="flex gap-2 items-end" action="{{ path('patchlevel_event_sourcing_dashboard_subscription_show') }}">
-                <div class="w-48">
-                    <label for="search" class="block text-xs font-medium leading-6 text-gray-900">Search</label>
-                    <div class="mt-1">
-                        <input type="text" name="search" id="search"
-                               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                               placeholder="Search..."
-                               value="{{ app.request.query.get('search') }}">
-                    </div>
-                </div>
-
-                <div class="w-48">
-                    <label for="group" class="block text-xs font-medium leading-6 text-gray-900">Group</label>
-                    <select id="group" name="group"
-                            class="mt-1 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                        <option {% if app.request.query.get('group') == "" %}selected{% endif %}
-                                value="">-- choose --
-                        </option>
-                        {% for group in groups|default([]) %}
-                            <option {% if app.request.query.get('group') == group %}selected{% endif %}
-                                    value="{{ group }}">{{ group }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-
-                <div class="w-48">
-                    <label for="mode" class="block text-xs font-medium leading-6 text-gray-900">Run mode</label>
-                    <select id="mode" name="mode"
-                            class="mt-1 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                        <option {% if app.request.query.get('mode') == "" %}selected{% endif %}
-                                value="">-- choose --
-                        </option>
-                        {% for mode in modes|default([]) %}
-                            <option {% if app.request.query.get('mode') == mode %}selected{% endif %}
-                                    value="{{ mode }}">{{ mode|replace({'_': ' '}) }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-
-                <div class="w-48">
-                    <label for="status" class="block text-xs font-medium leading-6 text-gray-900">Status</label>
-                    <select id="status" name="status"
-                            class="mt-1 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                        <option {% if app.request.query.get('status') == "" %}selected{% endif %}
-                                value="">-- choose --
-                        </option>
-                        {% for status in statuses|default([]) %}
-                            <option {% if app.request.query.get('status') == status %}selected{% endif %}
-                                    value="{{ status }}">{{ status }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <button type="submit"
-                        class="rounded-md bg-indigo-600 px-2.5 py-1.5 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                    {{ heroicon('funnel', 'h-6 w-6') }}
-                </button>
-
-                {% if app.request.query.get('search') or app.request.query.get('group') or app.request.query.get('mode') or app.request.query.get('status') %}
-                    <a class="rounded-md bg-red-600 px-2.5 py-1.5 font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
-                       href="{{ path('patchlevel_event_sourcing_dashboard_subscription_show') }}">
-                        {{ heroicon('backspace', 'h-6 w-6') }}
-                    </a>
-                {% endif %}
-            </form>
+        <div class="w-full sm:w-44">
+            {{ ui.label('group', 'Group') }}
+            {{ ui.select('group', groups|default([]), query.get('group')) }}
         </div>
-
-        <div class="mt-8 flow-root">
-            <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                    <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
-                        <table class="min-w-full divide-y divide-gray-300">
-                            <thead class="bg-gray-50">
-                            <tr>
-                                <th scope="col"
-                                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                    ID
-                                </th>
-                                <th scope="col"
-                                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                    Group
-                                </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                    Run mode
-                                </th>
-                                <th scope="col" class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">
-                                    Position
-                                </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                    Status
-                                </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                    Updated At
-                                </th>
-                                <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6"></th>
-                            </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-200 bg-white">
-                            {% for subscription in subscriptions|sort((a, b) => a.id <=> b.id) %}
-                                <tr class="group/row">
-                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                        {{ subscription.id }}
-                                    </td>
-                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                        {{ subscription.group }}
-                                    </td>
-                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                        {{ subscription.runMode.value|replace({'_': ' '}) }}
-                                    </td>
-                                    <td class="whitespace-nowrap px-3 py-4 text-sm {{ subscription.position < messageCount ? 'text-yellow-500' : 'text-gray-500'}} text-right">
-                                        {{ subscription.position }}
-                                    </td>
-                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                        {% if subscription.status.value == 'new' %}
-                                            {{ _self.badge('New', 'fill-blue-500') }}
-                                        {% elseif subscription.status.value == 'booting' %}
-                                            {{ _self.badge('Booting', 'fill-yellow-500') }}
-                                        {% elseif subscription.status.value == 'active' %}
-                                            {{ _self.badge('Active', 'fill-green-500') }}
-                                        {% elseif subscription.status.value == 'finished' %}
-                                            {{ _self.badge('Finished', 'fill-green-500') }}
-                                        {% elseif subscription.status.value == 'paused' %}
-                                            {{ _self.badge('Paused', 'fill-gray-500') }}
-                                        {% elseif subscription.status.value == 'detached' %}
-                                            {{ _self.badge('Detached', 'fill-gray-500') }}
-                                        {% elseif subscription.status.value == 'error' %}
-                                            {{ _self.badge('Error', 'fill-red-500') }}
-                                        {% elseif subscription.status.value == 'failed' %}
-                                            {{ _self.badge('Failed', 'fill-red-500') }}
-                                        {% else %}
-                                            {{ _self.badge(subscription.status.value, 'fill-gray-500') }}
-                                        {% endif %}
-                                    </td>
-                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                        {{ subscription.lastSavedAt|date('Y-m-d H:i:s') }}
-                                    </td>
-                                    <td class="relative flex gap-2 whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm sm:pr-6">
-                                        <a title="detail" href="#" class="text-gray-500 hover:text-gray-900"
-                                           data-modal="modal-{{ loop.index }}">
-                                            {{ heroicon('magnifying-glass', 'h-5 w-5') }}
-                                        </a>
-                                        <dialog id="modal-{{ loop.index }}"
-                                                class="relative text-left rounded p-8 w-3/4">
-                                            <form method="dialog" class="text-right static right-0">
-                                                <button>
-                                                    {{ heroicon('x-mark', 'h-5 w-5') }}
-                                                </button>
-                                            </form>
-
-                                            {{ include('@PatchlevelEventSourcingDashboard/subscription/detail.html.twig', {
-                                                subscription: subscription,
-                                            }) }}
-                                        </dialog>
-                                        {% if subscription.status.value in ['active', 'booting', 'error'] %}
-                                        <a title="pause" href="{{ path('patchlevel_eventsourcingdashboard_subscription_pause', {...app.request.query.all, id: subscription.id}) }}" class="text-gray-500 hover:text-gray-900">
-                                            {{ heroicon('pause-circle', 'h-5 w-5') }}
-                                        </a>
-                                        {% endif %}
-                                        {% if subscription.status.value in ['new'] %}
-                                            <a title="setup" href="{{ path('patchlevel_eventsourcingdashboard_subscription_setup', {...app.request.query.all, id: subscription.id}) }}" class="text-gray-500 hover:text-gray-900">
-                                                {{ heroicon('power', 'h-5 w-5') }}
-                                            </a>
-                                        {% endif %}
-                                        {% if subscription.status.value in ['paused', 'error', 'finished', 'detached', 'failed'] %}
-                                            <a title="activate" href="{{ path('patchlevel_eventsourcingdashboard_subscription_reactivate', {...app.request.query.all, id: subscription.id}) }}" class="text-gray-500 hover:text-gray-900">
-                                                {{ heroicon('play-circle', 'h-5 w-5') }}
-                                            </a>
-                                        {% endif %}
-                                        {% if subscription.status.value in ['paused', 'error', 'detached', 'failed'] %}
-                                            <a title="remove" href="{{ path('patchlevel_eventsourcingdashboard_subscription_remove', {...app.request.query.all, id: subscription.id}) }}" class="text-gray-500 hover:text-gray-900">
-                                                {{ heroicon('trash', 'h-5 w-5') }}
-                                            </a>
-                                        {% endif %}
-                                        {% if subscription.status.value in ['booting'] %}
-                                            <a title="boot" href="{{ path('patchlevel_eventsourcingdashboard_subscription_boot', {...app.request.query.all, id: subscription.id}) }}" class="text-gray-500 hover:text-gray-900">
-                                                {{ heroicon('rocket-launch', 'h-5 w-5') }}
-                                            </a>
-                                        {% endif %}
-                                        {% if subscription.status.value in ['active'] and subscription.position < messageCount %}
-                                            <a title="run" href="{{ path('patchlevel_eventsourcingdashboard_subscription_run', {...app.request.query.all, id: subscription.id}) }}" class="text-gray-500 hover:text-gray-900">
-                                                {{ heroicon('bolt', 'h-5 w-5') }}
-                                            </a>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                            {% else %}
-                                <tr>
-                                    <td colspan="7" class="px-3 py-4 text-sm text-gray-500 text-center">
-                                        No subscriptions found
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+        <div class="w-full sm:w-44">
+            {{ ui.label('mode', 'Run mode') }}
+            {{ ui.select('mode', modes|default([]), query.get('mode'), modeLabels) }}
         </div>
+        <div class="w-full sm:w-44">
+            {{ ui.label('status', 'Status') }}
+            {{ ui.select('status', statuses|default([]), query.get('status')) }}
+        </div>
+        <div class="flex gap-2">
+            {{ ui.button_primary('Filter', 'funnel') }}
+            {% if filtered %}
+                {{ ui.link_secondary(path('patchlevel_event_sourcing_dashboard_subscription_show'), 'Clear', 'x-mark', 'Remove all filters') }}
+            {% endif %}
+        </div>
+    </form>
+
+    <div class="relative mt-6 overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900 light:border-slate-200 light:bg-white light:shadow-sm">
+        {% set td = 'whitespace-nowrap px-4 py-3 text-sm text-gray-300 light:text-slate-600' %}
+        <table class="min-w-full divide-y divide-slate-800 light:divide-slate-200">
+            <thead class="bg-slate-800 light:bg-slate-50">
+            <tr>
+                {{ ui.th('ID') }}
+                {{ ui.th('Group') }}
+                {{ ui.th('Run mode') }}
+                {{ ui.th('Position', 'right') }}
+                {{ ui.th('Status') }}
+                {{ ui.th('Updated at') }}
+                <th scope="col" class="px-4 py-3"><span class="sr-only">Actions</span></th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800 light:divide-slate-100">
+            {% for subscription in subscriptions|sort((a, b) => a.id <=> b.id) %}
+                {% set status = subscription.status.value %}
+                {% set behind = subscription.position < messageCount %}
+                {% set params = app.request.query.all|merge({ id: subscription.id }) %}
+                {% set dialog = 'subscription-' ~ loop.index %}
+                <tr class="transition-colors hover:bg-slate-800 light:hover:bg-slate-50">
+                    <td class="{{ td }} font-medium text-white light:text-slate-900">{{ subscription.id }}</td>
+                    <td class="{{ td }}">{{ subscription.group }}</td>
+                    <td class="{{ td }}">{{ subscription.runMode.value|replace({'_': ' '}) }}</td>
+                    <td class="{{ td }} text-right font-mono text-xs tabular-nums {{ behind ? 'text-amber-300 light:text-amber-700' }}"
+                        {% if behind %}title="{{ messageCount - subscription.position }} events behind the store"{% endif %}>
+                        {{ subscription.position }}
+                        {% if behind %}<span class="text-gray-500 light:text-slate-400">/ {{ messageCount }}</span>{% endif %}
+                    </td>
+                    <td class="{{ td }}">{{ ui.status_badge(status) }}</td>
+                    <td class="{{ td }} font-mono text-xs tabular-nums">{{ subscription.lastSavedAt|date('Y-m-d H:i:s') }}</td>
+                    <td class="{{ td }}">
+                        <div class="flex items-center justify-end gap-0.5">
+                            {{ ui.dialog_button(dialog, 'Show subscription details') }}
+                            {% if status in ['active', 'booting', 'error'] %}
+                                {{ ui.icon_link(path('patchlevel_eventsourcingdashboard_subscription_pause', params), 'pause-circle', 'Pause') }}
+                            {% endif %}
+                            {% if status == 'new' %}
+                                {{ ui.icon_link(path('patchlevel_eventsourcingdashboard_subscription_setup', params), 'power', 'Set up') }}
+                            {% endif %}
+                            {% if status in ['paused', 'error', 'finished', 'detached', 'failed'] %}
+                                {{ ui.icon_link(path('patchlevel_eventsourcingdashboard_subscription_reactivate', params), 'play-circle', 'Reactivate') }}
+                            {% endif %}
+                            {% if status == 'booting' %}
+                                {{ ui.icon_link(path('patchlevel_eventsourcingdashboard_subscription_boot', params), 'rocket-launch', 'Boot') }}
+                            {% endif %}
+                            {% if status == 'active' and behind %}
+                                {{ ui.icon_link(path('patchlevel_eventsourcingdashboard_subscription_run', params), 'bolt', 'Run') }}
+                            {% endif %}
+                            {% if status in ['paused', 'error', 'detached', 'failed'] %}
+                                {{ ui.icon_link(path('patchlevel_eventsourcingdashboard_subscription_remove', params), 'trash', 'Remove') }}
+                            {% endif %}
+                        </div>
+
+                        {% embed '@PatchlevelEventSourcingDashboard/dialog.html.twig' with { id: dialog, title: subscription.id, subscription: subscription } %}
+                            {% block content %}
+                                {{ include('@PatchlevelEventSourcingDashboard/subscription/detail.html.twig', { subscription: subscription }) }}
+                            {% endblock %}
+                        {% endembed %}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7">
+                        {% if filtered %}
+                            {{ ui.empty('funnel', 'No subscriptions match this filter', 'Loosen the filter or clear it to see every subscription.') }}
+                        {% else %}
+                            {{ ui.empty('video-camera', 'No subscriptions registered', 'Projectors and processors appear here once the subscription engine knows them.') }}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
-
-    <script>
-      document.querySelectorAll("[data-modal]").forEach(function(button) {
-        button.addEventListener("click", function() {
-          var dialog = document.getElementById(button.dataset.modal);
-          dialog.showModal();
-          dialog.querySelector("button").addEventListener("click", function() {
-            dialog.close();
-          });
-        });
-      });
-    </script>
-
 {% endblock %}
-
-{% macro badge(label, color) %}
-    <span class="inline-flex items-center gap-x-1.5 rounded-full px-2 py-1 text-xs font-medium text-gray-900 ring-1 ring-inset ring-gray-200">
-  <svg class="h-1.5 w-1.5 {{ color }}" viewBox="0 0 6 6" aria-hidden="true">
-    <circle cx="3" cy="3" r="3" />
-  </svg>
-  {{ label }}
-</span>
-{% endmacro %}

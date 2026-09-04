@@ -1,160 +1,98 @@
 {% extends '@PatchlevelEventSourcingDashboard/layout.html.twig' %}
+{% import '@PatchlevelEventSourcingDashboard/components.html.twig' as ui %}
+
+{% block title %}Events · {% endblock %}
 
 {% block content %}
-    <div class="px-4 sm:px-6 lg:px-8">
+    {% set selectedName = app.request.query.get('name') %}
+    {% set selected = null %}
+    {% for event in events %}
+        {% if event.name == selectedName %}{% set selected = event %}{% endif %}
+    {% endfor %}
 
-        <!-- Headline -->
-        <div class="flex text-2xl font-bold mb-8 place-content-between">
-            Events
+    {{ ui.title('Events') }}
+    {{ ui.subtitle(events|length ~ ' registered ' ~ (events|length == 1 ? 'event' : 'events') ~ ' and who reacts to them.') }}
+
+    <div class="mt-8 grid items-start gap-6 lg:grid-cols-3">
+        <div class="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900 light:border-slate-200 light:bg-white light:shadow-sm">
+            <ul role="list" class="divide-y divide-slate-800 light:divide-slate-100">
+                {% set current = null %}
+                {% for event in events|sort((a, b) => a.name <=> b.name)|sort((a, b) => min(b.name|split('.')|length, 2) <=> min(a.name|split('.')|length, 2)) %}
+                    {% set parts = event.name|split('.') %}
+                    {% set category = parts|length > 1 ? parts|first : 'uncategorized' %}
+                    {% set name = parts|length > 1 ? parts|slice(1)|join('.') : event.name %}
+                    {% set active = event.name == selectedName %}
+
+                    {% if current != category %}
+                        {% set current = category %}
+                        <li class="bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-gray-400 light:bg-slate-50 light:text-slate-500">
+                            {{ category }}
+                        </li>
+                    {% endif %}
+                    <li class="relative">
+                        <span id="{{ event.name }}" class="absolute -top-24" aria-hidden="true"></span>
+                        <a href="{{ path('patchlevel_event_sourcing_dashboard_event_index', { name: event.name }) }}#{{ event.name }}"
+                           {% if active %}aria-current="true"{% endif %}
+                           class="{{ active ? 'bg-blue-950 light:bg-blue-50' : 'hover:bg-slate-800 light:hover:bg-slate-50' }} flex items-center gap-3 px-4 py-3 transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary-light">
+                            <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-600 text-white light:bg-slate-400" {% if eventsourcing_inspection_color(event.class) %}style="background: {{ eventsourcing_inspection_color(event.class) }};"{% endif %} aria-hidden="true">
+                                {{ heroicon(eventsourcing_inspection_icon(event.class, 'calendar'), 'h-4 w-4') }}
+                            </span>
+                            <span class="{{ active ? 'text-primary-light' : 'text-gray-200 light:text-slate-700' }} min-w-0 flex-1 truncate text-sm font-medium">{{ name }}</span>
+                            {{ heroicon('chevron-right', 'h-4 w-4 shrink-0 text-gray-500') }}
+                        </a>
+                    </li>
+                {% else %}
+                    <li>{{ ui.empty('calendar', 'No events registered', 'Events appear here once they are known to the event registry.') }}</li>
+                {% endfor %}
+            </ul>
         </div>
 
-
-        <div class="flex mt-8 gap-4 items-start">
-            <div class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow ring-1 ring-black ring-opacity-5 w-1/3">
-                <ul role="list" class="divide-y divide-gray-100">
-                    {% set current = null %}
-                    {% for event in events|sort((a, b) => a.name <=> b.name)|sort((a, b) => min(b.name|split('.')|length, 2) <=> min(a.name|split('.')|length, 2)) %}
-                        {% set parts = event.name|split('.') %}
-
-                        {% set category = parts|length > 1 ? parts|first : 'uncategorized' %}
-                        {% set name = parts|length > 1 ? parts|slice(1)|join('.') : event.name %}
-
-                        {% if current != category %}
-                            {% set current = category %}
-                            <li class="relative px-4 py-6 bg-gray-50 text-gray-500 font-semibold">
-                                {{ category }}
-                            </li>
-                        {% endif %}
-                        <li class="relative">
-                            <span id="{{ event.name }}" class="absolute -top-48"></span>
-                            <a class="flex justify-between gap-x-6 p-4"
-                               href="{{ path('patchlevel_event_sourcing_dashboard_event_index', {name: event.name}) }}#{{ event.name }}">
-                                <div class="flex min-w-0 gap-x-4">
-                                    <div {% if eventsourcing_inspection_color(event.class) %}style="background: {{ eventsourcing_inspection_color(event.class) }};"{% endif %}
-                                         class="circle h-8 w-8 rounded-full bg-gray-400 flex items-center justify-center">
-                                        {{ heroicon(eventsourcing_inspection_icon(event.class, 'calendar'), 'h-5 w-5 text-white') }}
-                                    </div>
-                                    <div class="min-w-0 flex-auto text-sm leading-8 text-gray-500 overflow-ellipsis overflow-hidden text-nowrap">
-                                        <span class="absolute inset-x-0 -top-px bottom-0"></span>
-                                        {{ name }}
-                                    </div>
-                                </div>
-                                <div class="flex shrink-0 items-center gap-x-4">
-                                    {{ heroicon('chevron-right', 'h-5 w-5 text-gray-400') }}
-                                </div>
-                            </a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-
-
-            <dl class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow ring-1 ring-black ring-opacity-5 w-2/3 sticky top-4">
-                <div class="text-sm text-gray-500">
-                    {% for event in events %}
-                        {% if event.name == app.request.query.get('name') %}
-
-                            <div class="px-4 py-6 bg-gray-50 text-gray-500 font-semibold">
-                                Details
-                            </div>
-
-                            <dl class="divide-y divide-gray-100">
-                                {{ _self.text('Name', event.name) }}
-                                {{ _self.text('Class', _self.methodFormat(event.class)) }}
-                            </dl>
-
-                            <div class="px-4 py-6 bg-gray-50 text-gray-500 font-semibold">
-                                Subscribers ({{ event.subscribers|length }})
-                            </div>
-
-                            <ul>
-                                {% for subscriber in event.subscribers %}
-                                    {{ _self.subscriber(subscriber) }}
-                                {% else %}
-                                    <li class="px-4 py-6">no subscriber</li>
-                                {% endfor %}
-                            </ul>
-
-                            {% if event.listeners %}
-                            <div class="px-4 py-6 bg-gray-50 text-gray-500 font-semibold">
-                                Listeners ({{ event.listeners|length }})
-                            </div>
-
-                            <ul>
-                                {% for listener in event.listeners %}
-                                    {{ _self.subscriber(listener) }}
-                                {% else %}
-                                    <li class="px-4 py-6">no listeners</li>
-                                {% endfor %}
-                            </ul>
-                            {% endif %}
-
-                        {% endif %}
-                    {% endfor %}
-
-                    {% if not app.request.query.get('name') %}
-
-                        <div class="py-24 text-xl text-gray-400 text-center">
-                            {{ heroicon('calendar', 'h-12 w-12 text-gray-400 mx-auto mb-2') }}
-                            Select an event to see details.
-                        </div>
-
-                    {% endif %}
-
+        <div class="rounded-2xl border border-slate-800 bg-slate-900 lg:col-span-2 lg:sticky lg:top-6 light:border-slate-200 light:bg-white light:shadow-sm">
+            {% if selected %}
+                <div class="border-b border-slate-800 px-5 py-4 light:border-slate-200">
+                    <h2 class="text-base font-semibold text-white light:text-slate-900">{{ selected.name }}</h2>
+                    <p class="mt-1 break-all font-mono text-xs text-gray-400 light:text-slate-500">{{ _self.class_name(selected.class) }}</p>
                 </div>
-            </dl>
+
+                <div class="px-5 py-4">
+                    <h3 class="text-sm font-semibold text-white light:text-slate-900">
+                        Subscribers <span class="ml-1 font-mono text-xs font-normal tabular-nums text-gray-500">{{ selected.subscribers|length }}</span>
+                    </h3>
+                    {% if selected.subscribers %}
+                        <ul role="list" class="mt-2 divide-y divide-slate-800 light:divide-slate-100">
+                            {% for subscriber in selected.subscribers %}{{ _self.handler(subscriber) }}{% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="mt-2 text-sm text-gray-500 light:text-slate-500">No subscriber handles this event.</p>
+                    {% endif %}
+                </div>
+
+                {% if selected.listeners %}
+                    <div class="border-t border-slate-800 px-5 py-4 light:border-slate-200">
+                        <h3 class="text-sm font-semibold text-white light:text-slate-900">
+                            Listeners <span class="ml-1 font-mono text-xs font-normal tabular-nums text-gray-500">{{ selected.listeners|length }}</span>
+                        </h3>
+                        <ul role="list" class="mt-2 divide-y divide-slate-800 light:divide-slate-100">
+                            {% for listener in selected.listeners %}{{ _self.handler(listener) }}{% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            {% else %}
+                {{ ui.empty('calendar', 'Select an event', 'Its class, subscribers and listeners show up here.') }}
+            {% endif %}
         </div>
     </div>
-
-    <script>
-      if (window.location.hash) {
-        const item = document.getElementById(window.location.hash.replace("#", ""));
-
-        console.log(item);
-        item.parentElement.classList.add("bg-blue-100");
-      }
-    </script>
-
 {% endblock %}
 
-{% macro text(name, content) %}
-    <div class="p-4 sm:grid sm:grid-cols-3 sm:gap-4">
-        <dt class="text-sm font-medium leading-6 text-gray-900">{{ name }}</dt>
-        <dd class="mt-1 text-sm leading-6 text-gray-500 sm:col-span-2 sm:mt-0">
-            {% if content == null %}
-                ~
-            {% else %}
-                {{ content }}
-            {% endif %}
-        </dd>
-    </div>
-{% endmacro %}
-
-{% macro subscriber(name) %}
+{% macro handler(name) %}
     {% set parts = name|split('\\') %}
-
-    <li class="px-4 py-2 flex gap-1 flex-col">
-        <div class="text-gray-900 font-medium">{{ parts|last }}</div>
-        <div class="text-xs text-gray-500">{{ name }}</div>
+    <li class="py-2.5">
+        <div class="text-sm font-medium text-gray-200 light:text-slate-800">{{ parts|last }}</div>
+        <div class="break-all font-mono text-xs text-gray-500 light:text-slate-500">{{ name }}</div>
     </li>
 {% endmacro %}
 
-{% macro node(node) %}
-    {% set parts = node.name|split('\\') %}
-
-    <li class="px-4 py-2 flex gap-1 flex-col">
-        {% if parts|length > 1 %}
-            <div class="text-gray-900 font-medium">{{ parts|last }}</div>
-            <div class="text-xs text-gray-500">{{ node.name }}</div>
-        {% else %}
-            <div class="text-gray-900 font-medium">{{ node.name }}</div>
-            <div class="text-xs text-gray-500">{{ node.category }}</div>
-        {% endif %}
-    </li>
-{% endmacro %}
-
-{% macro methodFormat(name) %}
+{% macro class_name(name) %}
     {% set parts = name|split('\\') %}
-    <span class="text-gray-400">{{ parts|slice(0, parts|length - 1)|join('\\') }}\</span><span
-        class="text-gray-500 font-semibold">{{ parts|last }}</span>
+    <span class="text-gray-500 light:text-slate-400">{{ parts|slice(0, parts|length - 1)|join('\\') }}\</span><span class="text-gray-300 light:text-slate-700">{{ parts|last }}</span>
 {% endmacro %}

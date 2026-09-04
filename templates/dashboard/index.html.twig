@@ -1,174 +1,119 @@
 {% extends '@PatchlevelEventSourcingDashboard/layout.html.twig' %}
+{% import '@PatchlevelEventSourcingDashboard/components.html.twig' as ui %}
+
+{% block title %}Dashboard · {% endblock %}
 
 {% block content %}
-    <div class="px-4 sm:px-6 lg:px-8">
+    {{ ui.title('Dashboard') }}
+    {{ ui.subtitle('Your event sourcing setup at a glance.') }}
 
-        <!-- Headline -->
-        <div class="text-2xl font-bold mb-8">
-            Dashboard
-        </div>
+    {# One strip, four cells: the numbers read as one system, not four widgets. #}
+    <div class="mt-8 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-slate-800 bg-slate-800 sm:grid-cols-2 lg:grid-cols-4 light:border-slate-200 light:bg-slate-200 light:shadow-sm">
+        {{ _self.stat('Events in store', messageCount, 'circle-stack', 'bg-blue-950 light:bg-blue-50 text-primary-light', path('patchlevel_event_sourcing_dashboard_store_show')) }}
+        {{ _self.stat('Aggregates', aggregateCount, 'identification', 'bg-violet-950 light:bg-violet-50 text-secondary-light', path('patchlevel_event_sourcing_dashboard_inspection_index')) }}
+        {{ _self.stat('Registered events', eventCount, 'calendar', 'bg-cyan-950 light:bg-cyan-50 text-tertiary-light', path('patchlevel_event_sourcing_dashboard_event_index')) }}
+        {{ _self.stat('Subscriptions', subscriptionCount, 'video-camera', 'bg-blue-950 light:bg-blue-50 text-primary-light', path('patchlevel_event_sourcing_dashboard_subscription_show')) }}
+    </div>
 
-        <!-- Stats -->
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {{ _self.stat_card(
-                "Events in store",
-                messageCount,
-                "circle-stack",
-                path('patchlevel_event_sourcing_dashboard_store_show')
-            ) }}
-            {{ _self.stat_card(
-                "Aggregates",
-                aggregateCount,
-                "identification",
-                path('patchlevel_event_sourcing_dashboard_inspection_index')
-            ) }}
-            {{ _self.stat_card(
-                "Registered events",
-                eventCount,
-                "calendar",
-                path('patchlevel_event_sourcing_dashboard_event_index')
-            ) }}
-            {{ _self.stat_card(
-                "Subscriptions",
-                subscriptionCount,
-                "video-camera",
-                path('patchlevel_event_sourcing_dashboard_subscription_show')
-            ) }}
-        </div>
+    <div class="mt-10">
+        {{ ui.section_title('Subscription health') }}
+        <p class="mt-1 text-sm text-gray-400 light:text-slate-500">
+            {% if subscriptionStatuses.error + subscriptionStatuses.failed > 0 %}
+                Some subscriptions stopped processing events. Open the red ones first.
+            {% else %}
+                No subscription is in an error state.
+            {% endif %}
+        </p>
 
-        <!-- Subscription health -->
-        <div class="mt-10">
-            <div class="text-base font-semibold leading-6 text-gray-900">
-                Subscription health
-            </div>
-
-            <div class="mt-4 flex flex-wrap gap-3">
-                {% for status, count in subscriptionStatuses %}
-                    <a href="{{ path('patchlevel_event_sourcing_dashboard_subscription_show', { status: status }) }}"
-                       class="{{ _self.status_classes(status, count) }} inline-flex items-center gap-x-2 rounded-md px-3 py-2 text-base font-medium capitalize ring-1 ring-inset">
-                        {{ status }}
-                        <span class="text-xl font-bold tabular-nums">{{ count }}</span>
-                    </a>
-                {% endfor %}
-            </div>
-        </div>
-
-        <!-- Latest events -->
-        <div class="mt-10 flow-root">
-            <div class="flex items-center justify-between">
-                <div class="text-base font-semibold leading-6 text-gray-900">
-                    Latest events
-                </div>
-                <a href="{{ path('patchlevel_event_sourcing_dashboard_store_show') }}"
-                   class="text-sm font-semibold text-indigo-600 hover:text-indigo-500">
-                    View all
+        <div class="mt-4 flex flex-wrap gap-2">
+            {% for status, count in subscriptionStatuses %}
+                {% set tone = count == 0 ? 'gray' : ui.status_tone(status)|trim %}
+                {% set tones = {
+                    green: 'border-green-900 bg-green-950 text-green-300 light:border-green-200 light:bg-green-50 light:text-green-800',
+                    yellow: 'border-amber-900 bg-amber-950 text-amber-200 light:border-amber-200 light:bg-amber-50 light:text-amber-800',
+                    red: 'border-red-900 bg-red-950 text-red-300 light:border-red-200 light:bg-red-50 light:text-red-800',
+                    blue: 'border-blue-900 light:border-blue-200 bg-blue-950 light:bg-blue-50 text-primary-light',
+                    gray: 'border-slate-700 bg-slate-800 text-gray-500 light:border-slate-200 light:bg-transparent light:text-slate-400',
+                } %}
+                <a href="{{ path('patchlevel_event_sourcing_dashboard_subscription_show', { status: status }) }}"
+                   class="{{ tones[tone] }} inline-flex items-center gap-x-2 rounded-lg border px-3 py-1.5 text-sm font-medium capitalize transition-colors hover:brightness-125 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light light:hover:brightness-95">
+                    {{ status }}
+                    <span class="font-mono text-base tabular-nums">{{ count }}</span>
                 </a>
-            </div>
+            {% endfor %}
+        </div>
+    </div>
 
-            <div class="-mx-4 -my-2 mt-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                    <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
-                        <table class="min-w-full divide-y divide-gray-300">
-                            <thead class="bg-gray-50">
-                            <tr>
-                                {% if eventsourcing_uses_stream_store() %}
-                                    <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
-                                        Stream
-                                    </th>
-                                {% else %}
-                                    <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
-                                        Aggregate
-                                    </th>
-                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">ID
-                                    </th>
-                                {% endif %}
-                                <th scope="col" class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">
-                                    Playhead
-                                </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                    Event
-                                </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                    Recorded On
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-200 bg-white">
-                            {% for message in messages %}
-                                <tr>
-                                    {% if eventsourcing_uses_stream_store() %}
-                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-500 sm:pl-6 group/parent">
-                                            {{ eventsourcing_stream_name(message) }}
-                                            <a href="{{ path('patchlevel_event_sourcing_dashboard_inspection_stream', { stream: eventsourcing_stream_name(message) }) }}#{{ eventsourcing_playhead(message) }}"
-                                               class="text-gray-500 hover:text-gray-900 invisible group-hover/parent:visible">
-                                                {{ heroicon('identification', 'h-5 w-5 inline') }}
-                                            </a>
-                                        </td>
-                                    {% else %}
-                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-500 sm:pl-6 group/parent">
-                                            {{ eventsourcing_aggregate_name(message) }}
-                                            <a href="{{ path('patchlevel_event_sourcing_dashboard_store_show', { aggregate: eventsourcing_aggregate_name(message) }) }}"
-                                               class="text-gray-500 hover:text-gray-900 invisible group-hover/parent:visible">
-                                                {{ heroicon('funnel', 'h-5 w-5 inline') }}
-                                            </a>
-                                        </td>
-                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 group/parent"
-                                            title="{{ eventsourcing_aggregate_id(message) }}">
-                                            {{ eventsourcing_short_id(eventsourcing_aggregate_id(message)) }}
-                                            <a href="{{ path('patchlevel_event_sourcing_dashboard_inspection_show', { aggregateName: eventsourcing_aggregate_name(message), aggregateId: eventsourcing_aggregate_id(message) }) }}#{{ eventsourcing_playhead(message) }}"
-                                               class="text-gray-500 hover:text-gray-900 invisible group-hover/parent:visible">
-                                                {{ heroicon('identification', 'h-5 w-5 inline') }}
-                                            </a>
-                                        </td>
-                                    {% endif %}
+    <div class="mt-10">
+        <div class="flex items-end justify-between gap-4">
+            {{ ui.section_title('Latest events') }}
+            <a href="{{ path('patchlevel_event_sourcing_dashboard_store_show') }}"
+               class="inline-flex items-center gap-1 rounded text-sm font-medium text-primary-light transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light light:hover:text-primary">
+                Open the store {{ heroicon('arrow-right', 'h-4 w-4') }}
+            </a>
+        </div>
 
-                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right">{{ eventsourcing_playhead(message) }}</td>
-                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 group/parent">
-                                        {{ eventsourcing_event_name(message) }}
-                                        <a href="{{ path('patchlevel_event_sourcing_dashboard_event_index', { name: eventsourcing_event_name(message) }) }}#{{ eventsourcing_event_name(message) }}"
-                                           class="text-gray-500 hover:text-gray-900 invisible group-hover/parent:visible">
-                                            {{ heroicon('calendar', 'h-5 w-5 inline') }}
-                                        </a>
-                                    </td>
-                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ eventsourcing_recorded_on(message) ? eventsourcing_recorded_on(message)|date('Y-m-d H:i:s') : '-' }}</td>
-                                </tr>
-                            {% else %}
-                                <tr>
-                                    <td colspan="5" class="text-center py-4 text-sm text-gray-500">No events found</td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+        <div class="relative mt-4 overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900 light:border-slate-200 light:bg-white light:shadow-sm">
+            {% set td = 'whitespace-nowrap px-4 py-3 text-sm text-gray-300 light:text-slate-600' %}
+            <table class="min-w-full divide-y divide-slate-800 light:divide-slate-200">
+                <thead class="bg-slate-800 light:bg-slate-50">
+                <tr>
+                    {% if eventsourcing_uses_stream_store() %}
+                        {{ ui.th('Stream') }}
+                    {% else %}
+                        {{ ui.th('Aggregate') }}
+                        {{ ui.th('ID') }}
+                    {% endif %}
+                    {{ ui.th('Playhead', 'right') }}
+                    {{ ui.th('Event') }}
+                    {{ ui.th('Recorded on') }}
+                </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800 light:divide-slate-100">
+                {% for message in messages %}
+                    <tr class="transition-colors hover:bg-slate-800 light:hover:bg-slate-50">
+                        {% if eventsourcing_uses_stream_store() %}
+                            <td class="{{ td }} group/parent font-medium text-white light:text-slate-900">
+                                {{ eventsourcing_stream_name(message) }}
+                                {{ ui.row_action(path('patchlevel_event_sourcing_dashboard_inspection_stream', { stream: eventsourcing_stream_name(message) }) ~ '#' ~ eventsourcing_playhead(message), 'identification', 'Inspect stream') }}
+                            </td>
+                        {% else %}
+                            <td class="{{ td }} group/parent font-medium text-white light:text-slate-900">
+                                {{ eventsourcing_aggregate_name(message) }}
+                                {{ ui.row_action(path('patchlevel_event_sourcing_dashboard_store_show', { aggregate: eventsourcing_aggregate_name(message) }), 'funnel', 'Filter by aggregate') }}
+                            </td>
+                            <td class="{{ td }} group/parent font-mono text-xs" title="{{ eventsourcing_aggregate_id(message) }}">
+                                {{ eventsourcing_short_id(eventsourcing_aggregate_id(message)) }}
+                                {{ ui.row_action(path('patchlevel_event_sourcing_dashboard_inspection_show', { aggregateName: eventsourcing_aggregate_name(message), aggregateId: eventsourcing_aggregate_id(message) }) ~ '#' ~ eventsourcing_playhead(message), 'identification', 'Inspect aggregate') }}
+                            </td>
+                        {% endif %}
+                        <td class="{{ td }} text-right font-mono text-xs tabular-nums">{{ eventsourcing_playhead(message) }}</td>
+                        <td class="{{ td }} group/parent">
+                            {{ eventsourcing_event_name(message) }}
+                            {{ ui.row_action(path('patchlevel_event_sourcing_dashboard_event_index', { name: eventsourcing_event_name(message) }) ~ '#' ~ eventsourcing_event_name(message), 'calendar', 'Show event definition') }}
+                        </td>
+                        <td class="{{ td }} font-mono text-xs tabular-nums">{{ eventsourcing_recorded_on(message) ? eventsourcing_recorded_on(message)|date('Y-m-d H:i:s') : '-' }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5">{{ ui.empty('inbox', 'No events recorded yet', 'Events show up here as soon as your application stores them.') }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 {% endblock %}
 
-{% macro stat_card(label, value, icon, url) %}
+{% macro stat(label, value, icon, tile, url) %}
     <a href="{{ url }}"
-       class="flex items-center gap-x-4 rounded-lg bg-white px-4 py-5 shadow ring-1 ring-black ring-opacity-5 hover:bg-gray-50">
-        <div class="rounded-md bg-indigo-600 p-3">
-            {{ heroicon(icon, 'h-6 w-6 text-white') }}
+       class="group flex items-center justify-between gap-4 bg-slate-900 p-5 transition-colors hover:bg-slate-800 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary-light light:bg-white light:hover:bg-slate-50">
+        <div class="min-w-0">
+            <div class="truncate text-sm text-gray-400 light:text-slate-500">{{ label }}</div>
+            <div class="mt-1 font-mono text-3xl font-semibold tabular-nums text-white light:text-slate-900">{{ value }}</div>
         </div>
-        <div>
-            <div class="text-sm font-medium text-gray-500">{{ label }}</div>
-            <div class="text-2xl font-semibold text-gray-900">{{ value }}</div>
+        <div class="{{ tile }} flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-transform group-hover:scale-105 motion-reduce:transition-none" aria-hidden="true">
+            {{ heroicon(icon, 'h-5 w-5') }}
         </div>
     </a>
-{% endmacro %}
-
-{% macro status_classes(status, count) %}
-    {%- if count == 0 -%}
-        bg-white text-gray-500 ring-gray-300
-    {%- elseif status in ['error', 'failed'] -%}
-        bg-red-50 text-red-700 ring-red-600/20
-    {%- elseif status in ['paused', 'detached'] -%}
-        bg-yellow-50 text-yellow-800 ring-yellow-600/20
-    {%- elseif status == 'active' -%}
-        bg-green-50 text-green-700 ring-green-600/20
-    {%- else -%}
-        bg-gray-50 text-gray-600 ring-gray-500/10
-    {%- endif -%}
 {% endmacro %}
