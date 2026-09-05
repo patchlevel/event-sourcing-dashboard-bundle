@@ -9,7 +9,6 @@ export default defineConfig(({ mode }) => ({
             copy: [
                 // Read from disk by HeroiconsExtension, so the names must stay stable.
                 { from: 'node_modules/heroicons/24/outline', to: 'icons', hash: false },
-                { from: 'assets/fonts', to: '', pattern: /LICENSE/, hash: false },
             ],
         }),
     ],
