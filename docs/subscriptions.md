@@ -4,7 +4,7 @@ The subscriptions view lists every subscription known to the subscription engine
 state, and lets you control it. This is where you boot new projectors, rerun them, pause noisy
 processors, or rebuild a projection from scratch.
 
-![The subscriptions view](screenshot3.png)
+![The subscriptions view](screenshot-subscriptions.png)
 
 ## What you see
 

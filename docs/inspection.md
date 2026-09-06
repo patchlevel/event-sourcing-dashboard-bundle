@@ -5,7 +5,7 @@ shows you everything about it: the recorded events, the current state in several
 and the snapshot if one exists. You can also time travel to see the aggregate as it looked at an
 earlier point in its history.
 
-![The inspection view](screenshot2.png)
+![The inspection view](screenshot-inspection.png)
 
 ## Opening an aggregate
 

@@ -4,7 +4,7 @@ The store view lists the messages in your event store in reverse order, newest f
 see what your application recorded most recently. It is reachable from the sidebar and from the
 [dashboard](dashboard.md) overview.
 
-![The store view](screenshot1.png)
+![The store view](screenshot-store.png)
 
 ## Browsing events
 

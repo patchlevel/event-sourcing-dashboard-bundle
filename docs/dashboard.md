@@ -4,6 +4,8 @@ The dashboard view is the landing page of the bundle. It gives you an overview o
 sourcing setup at a glance, before you drill down into the store, a single aggregate or your
 subscriptions. The index route of the bundle redirects here.
 
+![The dashboard view](screenshot-dashboard.png)
+
 ## Overview
 
 Four cards summarize the current state of your system:

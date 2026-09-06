@@ -5,7 +5,7 @@ registry. For each event it also shows which parts of your system react to it, s
 flow from an event to its consumers at a glance. With the `#[Inspect]` attribute you can also
 control how each event is rendered across the dashboard.
 
-![The events view](screenshot4.png)
+![The events view](screenshot-events.png)
 
 ## What you see
 

@@ -28,21 +28,25 @@ composer require --dev patchlevel/event-sourcing-dashboard-bundle
 
 ## Screenshots
 
+### Dashboard
+
+![dashboard screenshot](docs/screenshot-dashboard.png)
+
 ### Store
 
-![Screenshot1](docs/screenshot1.png)
+![store screenshot](docs/screenshot-store.png)
 
 ### Inspector
 
-![Screenshot2](docs/screenshot2.png)
+![inspection screenshot](docs/screenshot-inspection.png)
 
 ### Subscriptions
 
-![Screenshot3](docs/screenshot3.png)
+![subscription screenshot](docs/screenshot-subscriptions.png)
 
 ### Events
 
-![Screenshot4](docs/screenshot4.png)
+![events screenshot](docs/screenshot-events.png)
 
 ## Integration
 
