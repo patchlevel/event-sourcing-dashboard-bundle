@@ -1,6 +1,35 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss' source(none);
+
+/* Only these files are scanned for class names. */
+@source '../assets/app.js';
+@source '../templates';
+
+@plugin '@tailwindcss/forms' {
+    strategy: class;
+}
+
+/* Theme override: the switch in layout.html.twig sets data-theme on <html>. */
+@custom-variant light (&:where([data-theme="light"], [data-theme="light"] *));
+/* Content width preference, see the switch in layout.html.twig. */
+@custom-variant wide (&:where([data-width="full"] *));
+/* Tailwind v4 wraps hover: in @media (hover: hover), which hides the hover-revealed
+   row actions on touch screens. Keep the v3 behaviour: hover applies on tap. */
+@custom-variant hover (&:hover);
+
+@theme {
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+
+    --color-primary: #1166dd;
+    --color-secondary: #6341f0;
+    --color-tertiary: #0ba6be;
+
+    /* Accent shades that differ per theme: dark values here, the light values are
+       remapped on :root[data-theme="light"] below. */
+    --color-primary-light: #3482ef;
+    --color-secondary-light: #8267f3;
+    --color-tertiary-light: #15d3f1;
+}
 
 @layer base {
     @font-face {
@@ -19,19 +48,14 @@
         src: url('./fonts/JetBrainsMono-Regular.woff2') format('woff2');
     }
 
-    /* Accent shades as RGB triples so Tailwind opacity modifiers keep working
-       (see tailwind.config.js). Dark values first, light remaps below. */
     :root {
-        --color-primary-light: 52 130 239;
-        --color-secondary-light: 130 103 243;
-        --color-tertiary-light: 21 211 241;
         color-scheme: dark;
     }
 
     :root[data-theme="light"] {
-        --color-primary-light: 17 102 221;
-        --color-secondary-light: 99 65 240;
-        --color-tertiary-light: 14 116 144;
+        --color-primary-light: #1166dd;
+        --color-secondary-light: #6341f0;
+        --color-tertiary-light: #0e7490;
         color-scheme: light;
     }
 
@@ -48,6 +72,12 @@
 
     body {
         @apply h-full font-sans;
+    }
+
+    /* Tailwind v4's preflight leaves buttons with the default cursor. */
+    button:not(:disabled),
+    [role="button"]:not(:disabled) {
+        cursor: pointer;
     }
 
     /* Code ligatures would turn `->` into an arrow glyph; readers copy what
@@ -86,36 +116,42 @@
     }
 }
 
-@layer components {
-    /* Code and data windows stay dark in both themes, like the code samples on
-       patchlevel.dev: the dump is a terminal, not a document. */
-    .code-window {
-        @apply rounded-xl border border-slate-800 bg-slate-950 text-gray-300 light:border-slate-800 light:bg-slate-900;
-    }
+/* Code and data windows stay dark in both themes, like the code samples on
+   patchlevel.dev: the dump is a terminal, not a document. Declared as utilities
+   so they can be composed with @apply and variants. */
+@utility code-window {
+    @apply rounded-xl border border-slate-800 bg-slate-950 text-gray-300 light:border-slate-800 light:bg-slate-900;
+}
 
-    .json {
-        @apply code-window overflow-x-auto px-4 py-3 font-mono text-xs leading-relaxed whitespace-pre;
-    }
+@utility json {
+    @apply code-window overflow-x-auto px-4 py-3 font-mono text-xs leading-relaxed whitespace-pre;
+}
 
-    .json_key, .json_key span {
+@utility json_key {
+    @apply text-tertiary-light light:text-[#15d3f1];
+
+    & span {
         @apply text-tertiary-light light:text-[#15d3f1];
-    }
-
-    .json_string, .json_string span {
-        @apply text-green-400;
-    }
-
-    .json_number {
-        @apply text-primary-light light:text-[#3482ef];
-    }
-
-    .json_bool {
-        @apply text-amber-300;
     }
 }
 
-/* Plain CSS, outside @layer: these selectors never appear in the templates, so a
-   layered rule would be purged as unused. */
+@utility json_string {
+    @apply text-green-400;
+
+    & span {
+        @apply text-green-400;
+    }
+}
+
+@utility json_number {
+    @apply text-primary-light light:text-[#3482ef];
+}
+
+@utility json_bool {
+    @apply text-amber-300;
+}
+
+/* Plain CSS for the native dialog: no utilities are involved. */
 dialog[open] {
     animation: dialog-in 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }

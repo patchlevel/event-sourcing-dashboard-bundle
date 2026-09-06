@@ -14,7 +14,7 @@
     {{ ui.subtitle(events|length ~ ' registered ' ~ (events|length == 1 ? 'event' : 'events') ~ ' and who reacts to them.') }}
 
     <div class="mt-8 grid items-start gap-6 lg:grid-cols-3">
-        <div class="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900 light:border-slate-200 light:bg-white light:shadow-sm">
+        <div class="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900 light:border-slate-200 light:bg-white light:shadow-xs">
             <ul role="list" class="divide-y divide-slate-800 light:divide-slate-100">
                 {% set current = null %}
                 {% for event in events|sort((a, b) => a.name <=> b.name)|sort((a, b) => min(b.name|split('.')|length, 2) <=> min(a.name|split('.')|length, 2)) %}
@@ -33,7 +33,7 @@
                         <span id="{{ event.name }}" class="absolute -top-24" aria-hidden="true"></span>
                         <a href="{{ path('patchlevel_event_sourcing_dashboard_event_index', { name: event.name }) }}#{{ event.name }}"
                            {% if active %}aria-current="true"{% endif %}
-                           class="{{ active ? 'bg-blue-950 light:bg-blue-50' : 'hover:bg-slate-800 light:hover:bg-slate-50' }} flex items-center gap-3 px-4 py-3 transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary-light">
+                           class="{{ active ? 'bg-blue-950 light:bg-blue-50' : 'hover:bg-slate-800 hover:light:bg-slate-50' }} flex items-center gap-3 px-4 py-3 transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary-light">
                             <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-600 text-white light:bg-slate-400" {% if eventsourcing_inspection_color(event.class) %}style="background: {{ eventsourcing_inspection_color(event.class) }};"{% endif %} aria-hidden="true">
                                 {{ heroicon(eventsourcing_inspection_icon(event.class, 'calendar'), 'h-4 w-4') }}
                             </span>
@@ -47,7 +47,7 @@
             </ul>
         </div>
 
-        <div class="rounded-2xl border border-slate-800 bg-slate-900 lg:col-span-2 lg:sticky lg:top-6 light:border-slate-200 light:bg-white light:shadow-sm">
+        <div class="rounded-2xl border border-slate-800 bg-slate-900 lg:col-span-2 lg:sticky lg:top-6 light:border-slate-200 light:bg-white light:shadow-xs">
             {% if selected %}
                 <div class="border-b border-slate-800 px-5 py-4 light:border-slate-200">
                     <h2 class="text-base font-semibold text-white light:text-slate-900">{{ selected.name }}</h2>

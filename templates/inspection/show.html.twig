@@ -22,10 +22,10 @@
     </div>
 
     <div class="mt-8 grid items-start gap-6 lg:grid-cols-2">
-        <div class="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900 lg:sticky lg:top-6 light:border-slate-200 light:bg-white light:shadow-sm">
+        <div class="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900 lg:sticky lg:top-6 light:border-slate-200 light:bg-white light:shadow-xs">
             {% if until %}
                 {# The one loud surface on the page: the brand gradient says "you are not looking at now". #}
-                <div class="flex flex-wrap items-center justify-between gap-3 bg-gradient-to-r from-secondary to-primary px-5 py-3 text-white">
+                <div class="flex flex-wrap items-center justify-between gap-3 bg-linear-to-r from-secondary to-primary px-5 py-3 text-white">
                     <div class="flex items-center gap-2 text-sm">
                         {{ heroicon('clock', 'h-4 w-4') }}
                         <span class="font-semibold">Time travel</span>
@@ -43,7 +43,7 @@
                 {% for key, label in { details: 'Details', serialized: 'Serialized', dump: 'Dump', snapshot: 'Snapshot' } %}
                     <a href="{{ path('patchlevel_event_sourcing_dashboard_inspection_show', base|merge({ tab: key, until: until })) }}{% if until %}#{{ until }}{% endif %}"
                        {% if key == tab %}aria-current="page"{% endif %}
-                       class="{{ key == tab ? 'border-primary-light text-white light:text-slate-900' : 'border-transparent text-gray-400 hover:border-slate-600 hover:text-white light:text-slate-500 light:hover:border-slate-300 light:hover:text-slate-900' }} -mb-px border-b-2 px-3 py-3 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary-light">
+                       class="{{ key == tab ? 'border-primary-light text-white light:text-slate-900' : 'border-transparent text-gray-400 hover:border-slate-600 hover:text-white light:text-slate-500 hover:light:border-slate-300 hover:light:text-slate-900' }} -mb-px border-b-2 px-3 py-3 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary-light">
                         {{ label }}
                     </a>
                 {% endfor %}
@@ -86,7 +86,7 @@
             </div>
         </div>
 
-        <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5 light:border-slate-200 light:bg-white light:shadow-sm">
+        <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5 light:border-slate-200 light:bg-white light:shadow-xs">
             <h2 class="mb-5 text-sm font-semibold text-white light:text-slate-900">
                 Event history <span class="ml-1 font-mono text-xs font-normal tabular-nums text-gray-500">{{ count }}</span>
             </h2>
@@ -112,15 +112,15 @@
                         </span>
 
                         <div class="flex min-w-0 flex-1 flex-col gap-1 pt-1.5 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-                            <div class="min-w-0 break-words text-sm text-gray-200 light:text-slate-700">
+                            <div class="min-w-0 wrap-break-word text-sm text-gray-200 light:text-slate-700">
                                 {{ eventsourcing_inspection_description(message.event, eventsourcing_event_name(message)) }}
                                 <span class="ml-1 inline-flex gap-0.5 align-middle opacity-0 transition-opacity focus-within:opacity-100 group-hover/message:opacity-100">
                                     <button type="button" data-modal="{{ dialog }}" title="Show message details" aria-label="Show message details"
-                                            class="rounded p-0.5 text-gray-500 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light light:hover:text-slate-900">
+                                            class="rounded-sm p-0.5 text-gray-500 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light hover:light:text-slate-900">
                                         {{ heroicon('magnifying-glass', 'h-4 w-4') }}
                                     </button>
                                     <a href="{{ path('patchlevel_event_sourcing_dashboard_inspection_show', base|merge({ until: playhead })) }}#{{ playhead }}" title="Travel to this event" aria-label="Travel to this event"
-                                       class="rounded p-0.5 text-gray-500 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light light:hover:text-slate-900">
+                                       class="rounded-sm p-0.5 text-gray-500 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light hover:light:text-slate-900">
                                         {{ heroicon('play-pause', 'h-4 w-4') }}
                                     </a>
                                 </span>

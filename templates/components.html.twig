@@ -48,34 +48,34 @@
 {% endmacro %}
 
 {% macro link_secondary(url, text, icon = null, title = null) %}
-    <a href="{{ url }}" {% if title %}title="{{ title }}"{% endif %} class="inline-flex items-center gap-x-1.5 rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light light:border-slate-300 light:bg-slate-100 light:text-slate-900 light:hover:bg-slate-200">
+    <a href="{{ url }}" {% if title %}title="{{ title }}"{% endif %} class="inline-flex items-center gap-x-1.5 rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light light:border-slate-300 light:bg-slate-100 light:text-slate-900 hover:light:bg-slate-200">
         {% if icon %}{{ heroicon(icon, '-ml-0.5 h-4 w-4') }}{% endif %}{{ text }}
     </a>
 {% endmacro %}
 
 {# Icon-only control inside a row: always visible, labelled for screen readers. #}
 {% macro icon_link(url, icon, title) %}
-    <a href="{{ url }}" title="{{ title }}" aria-label="{{ title }}" class="inline-flex rounded-md p-1 text-gray-400 transition-colors hover:bg-slate-800 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light light:text-slate-500 light:hover:bg-slate-100 light:hover:text-slate-900">
+    <a href="{{ url }}" title="{{ title }}" aria-label="{{ title }}" class="inline-flex rounded-md p-1 text-gray-400 transition-colors hover:bg-slate-800 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light light:text-slate-500 hover:light:bg-slate-100 hover:light:text-slate-900">
         {{ heroicon(icon, 'h-4 w-4') }}
     </a>
 {% endmacro %}
 
 {# Secondary navigation next to a value: revealed on hover of the enclosing .group/parent, always reachable by keyboard. #}
 {% macro row_action(url, icon, title) %}
-    <a href="{{ url }}" title="{{ title }}" aria-label="{{ title }}" class="inline-flex rounded p-0.5 align-middle text-gray-500 opacity-0 transition-opacity hover:text-white focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light group-hover/parent:opacity-100 light:hover:text-slate-900">
+    <a href="{{ url }}" title="{{ title }}" aria-label="{{ title }}" class="inline-flex rounded-sm p-0.5 align-middle text-gray-500 opacity-0 transition-opacity hover:text-white focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light group-hover/parent:opacity-100 hover:light:text-slate-900">
         {{ heroicon(icon, 'h-4 w-4') }}
     </a>
 {% endmacro %}
 
 {% macro clipboard(text) %}
-    <button type="button" data-clipboard="{{ text }}" title="Copy" aria-label="Copy to clipboard" class="group/copy inline-flex rounded p-0.5 align-middle text-gray-500 opacity-0 transition-opacity hover:text-white focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light group-hover/parent:opacity-100 data-[copied]:opacity-100 light:hover:text-slate-900">
-        {{ heroicon('clipboard', 'h-4 w-4 group-data-[copied]/copy:hidden') }}
-        {{ heroicon('check', 'hidden h-4 w-4 text-green-400 group-data-[copied]/copy:inline light:text-green-600') }}
+    <button type="button" data-clipboard="{{ text }}" title="Copy" aria-label="Copy to clipboard" class="group/copy inline-flex rounded-sm p-0.5 align-middle text-gray-500 opacity-0 transition-opacity hover:text-white focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light group-hover/parent:opacity-100 data-copied:opacity-100 hover:light:text-slate-900">
+        {{ heroicon('clipboard', 'h-4 w-4 group-data-copied/copy:hidden') }}
+        {{ heroicon('check', 'hidden h-4 w-4 text-green-400 group-data-copied/copy:inline light:text-green-600') }}
     </button>
 {% endmacro %}
 
 {% macro dialog_button(id, title = 'Show details') %}
-    <button type="button" data-modal="{{ id }}" title="{{ title }}" aria-label="{{ title }}" class="inline-flex rounded-md p-1 text-gray-400 transition-colors hover:bg-slate-800 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light light:text-slate-500 light:hover:bg-slate-100 light:hover:text-slate-900">
+    <button type="button" data-modal="{{ id }}" title="{{ title }}" aria-label="{{ title }}" class="inline-flex rounded-md p-1 text-gray-400 transition-colors hover:bg-slate-800 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light light:text-slate-500 hover:light:bg-slate-100 hover:light:text-slate-900">
         {{ heroicon('magnifying-glass', 'h-4 w-4') }}
     </button>
 {% endmacro %}
@@ -150,7 +150,7 @@
 {% macro error(message) %}
     <div class="flex gap-3 rounded-xl border border-red-900 bg-red-950 p-4 text-sm text-red-300 light:border-red-200 light:bg-red-50 light:text-red-800">
         {{ heroicon('exclamation-circle', 'h-5 w-5 shrink-0') }}
-        <p class="min-w-0 break-words">{{ message }}</p>
+        <p class="min-w-0 wrap-break-word">{{ message }}</p>
     </div>
 {% endmacro %}
 

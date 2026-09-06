@@ -7,7 +7,7 @@
     {{ ui.title('Inspection') }}
     {{ ui.subtitle('Pick an aggregate to see its state, its event history and travel back in time.') }}
 
-    <div class="mt-8 max-w-md rounded-2xl border border-slate-800 bg-slate-900 p-6 light:border-slate-200 light:bg-white light:shadow-sm sm:p-8">
+    <div class="mt-8 max-w-md rounded-2xl border border-slate-800 bg-slate-900 p-6 light:border-slate-200 light:bg-white light:shadow-xs sm:p-8">
         <form class="space-y-5" method="POST" action="{{ path('patchlevel_event_sourcing_dashboard_inspection_index') }}">
             <div>
                 {{ ui.label('aggregate', 'Aggregate') }}
