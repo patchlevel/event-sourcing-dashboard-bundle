@@ -1,12 +1,17 @@
 {
-  "entrypoints": {
+  "isProd": true,
+  "devServer": null,
+  "publicPath": "/build/",
+  "entryPoints": {
     "app": {
-      "css": [
-        "/build/app.css"
-      ],
       "js": [
-        "/build/app.js"
-      ]
+        "build/app.js"
+      ],
+      "css": [
+        "build/app.css"
+      ],
+      "preload": [],
+      "dynamic": []
     }
   }
 }
